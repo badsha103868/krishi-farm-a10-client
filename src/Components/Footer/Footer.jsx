@@ -4,6 +4,7 @@ import twitterImg from '../../assets/twitter.png'
 import linkedInImg from '../../assets/linkedIn.png'
 import { FaLocationDot } from 'react-icons/fa6';
 import { MdOutlinePhoneInTalk } from 'react-icons/md';
+import logoImg from '../../assets/logoFarm2.jpeg'
 
 
 const Footer = () => { 
@@ -20,7 +21,10 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand / about */}
           <div className="space-y-4">
+             <div className='flex gap-2'>
+              <img className="w-[30px] h-[30px]  md:w-[35px] md:h-[35px] rounded-full " src={logoImg} alt="" />
             <h3 className="text-2xl font-semibold">Krishi Farm</h3>
+             </div>
             <p className="text-sm opacity-90">Safe to eat, improved crops — Krishi Farm is at the farmer's side. We simplify agricultural creation with information, markets, and nearby services</p>
 
             <div className="flex gap-3 mt-2">

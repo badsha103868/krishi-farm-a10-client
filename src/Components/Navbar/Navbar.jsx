@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router';
+import logoImg from '../../assets/logoFarm2.jpeg'
 
 const Navbar = () => {
    
@@ -9,7 +10,7 @@ const Navbar = () => {
         <NavLink to="/">Home</NavLink>
       </li>
       <li>
-        <NavLink to="/allProducts">All Crops</NavLink>
+        <NavLink to="/allCrops">All Crops</NavLink>
       </li>
       
       
@@ -60,8 +61,15 @@ const Navbar = () => {
             {links}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">Krishi Farm</a>
+           {/* navbar left */}
+       <div className="flex items-center gap-1 ">
+
+            <img className="w-[30px] h-[30px]  md:w-[35px] md:h-[35px] rounded-full " src={logoImg} alt="" />
+         
+            <h3 className="font-medium md:font-semibold  lg:font-bold text-primary text-xl">Krishi Farm</h3>
+         </div>
       </div>
+       {/* navbar center */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>

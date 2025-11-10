@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "tailwindcss";
 @plugin "daisyui";
 
@@ -8,7 +9,7 @@
   --color-primary: #2E8B57;   /*  fresh green */
   --color-secondary: #FFD700;   /*  golden yellow */
   --color-accent: #94D82D;    /*  light green accent*/
-  --color-neutral: #333333;    /*   dark text*/
+  --color-neutral: #4B5563;    /*   dark text*/
   --color-base-100: #F9FAFB;   /*  light background*/
   --color-success: #22C55E;      /*   success green */
 }
@@ -27,4 +28,19 @@
 
 .btn-secondary:hover {
   @apply opacity-90;
+}
+
+
+*{
+  font-family: "Poppins", sans-serif;
+}
+
+.menu a.active{
+  text-decoration: underline;
+  color:  green;
+
+}
+.menu a{
+  margin:20px;
+  text-decoration: none;
 }

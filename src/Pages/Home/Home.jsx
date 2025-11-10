@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../../Components/Navbar/Navbar';
 import LatestCrops from './LatestCrops';
+import HeroSlider from './HeroSlider';
 
   const latestCropsPromise = fetch('http://localhost:3000/latestCrops')
   .then(res => res.json())
@@ -8,6 +9,7 @@ import LatestCrops from './LatestCrops';
 const Home = () => {
   return (
     <div>
+       <HeroSlider></HeroSlider>
       <LatestCrops latestCropsPromise={latestCropsPromise}></LatestCrops>
     </div>
   );

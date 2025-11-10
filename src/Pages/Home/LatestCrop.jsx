@@ -25,7 +25,7 @@ const LatestCrop = ({ crop }) => {
           Price: <span className="font-semibold text-green-600">{pricePerUnit} Tk</span> / {unit}
         </p>
         <div className="card-actions mt-3">
-          <Link to={`/cropDetails/${_id}`} className="btn btn-primary w-full">
+          <Link to='/allCrops' className="btn btn-primary w-full">
             View Details
           </Link>
         </div>
