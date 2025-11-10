@@ -5,7 +5,7 @@ const LatestCrops = ({ latestCropsPromise }) => {
    const crops = use(latestCropsPromise)
    console.log(crops)
   return (
-    <div>
+    <div className='mt-5'>
       <h2 className='text-3xl md:text-4xl lg:text-5xl font-bold text-center text-primary mb-2'>Latest <span className='text-secondary'>Crops</span></h2> 
       <p className="text-neutral text-xl font-semibold text-center mb-2">
           Freshly harvested crops directly from our trusted farmers.

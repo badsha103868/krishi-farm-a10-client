@@ -45,7 +45,7 @@ const HeroSlider = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section className="relative w-full h-screen overflow-hidden">
+    <section className="relative w-full h-[500px] md:h-screen overflow-hidden">
       <Swiper
         modules={[Autoplay, Pagination, EffectFade]}
         effect="fade"
@@ -63,6 +63,7 @@ const HeroSlider = () => {
                 backgroundImage: `url(${slide.img})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
               }}
             >
               {/* green gradient overlay */}
@@ -99,10 +100,7 @@ const HeroSlider = () => {
         ))}
       </Swiper>
 
-      {/* Floating Krishi logo text */}
-      <div className="absolute bottom-10 right-10 text-white/70 font-semibold text-lg tracking-wider">
-        🌾 Krishi Farm
-      </div>
+      
     </section>
   );
 };
