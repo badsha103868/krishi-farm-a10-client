@@ -39,7 +39,7 @@ const MeetOurExperts = () => {
       </h2>
 
       {/* Desktop View (Grid) */}
-      <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-8  md:px-12">
+      <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-8 ">
         {experts.map((expert) => (
           <div
             key={expert.id}
@@ -63,7 +63,7 @@ const MeetOurExperts = () => {
       </div>
 
       {/* Mobile View (Swiper Slider) */}
-      <div className="md:hidden px-4">
+      <div className="md:hidden ">
         <Swiper
           modules={[Autoplay]}
           autoplay={{ delay: 2500, disableOnInteraction: false }}
