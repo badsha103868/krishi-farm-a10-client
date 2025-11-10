@@ -4,14 +4,27 @@
 @plugin "daisyui/theme" {
   name: "light";
   default: true;
-  --color-primary: #632EE3;
-  --color-secondary: teal;
+  
+  --color-primary: #2E8B57;   /*  fresh green */
+  --color-secondary: #FFD700;   /*  golden yellow */
+  --color-accent: #94D82D;    /*  light green accent*/
+  --color-neutral: #333333;    /*   dark text*/
+  --color-base-100: #F9FAFB;   /*  light background*/
+  --color-success: #22C55E;      /*   success green */
 }
 
 /* custom button overhide */
 .btn-primary {
- @apply bg-gradient-to-r from-[#632EE3] to-[#9F62F2] border-none text-white;
+ @apply bg-gradient-to-r from-[#2E8B57] to-[#3CB371] border-none text-white;
 }
 .btn-primary :hover {
     @apply opacity-90
+}
+
+.btn-secondary {
+  @apply bg-gradient-to-r from-[#FFD700] to-[#FFC107] text-black border-none;
+}
+
+.btn-secondary:hover {
+  @apply opacity-90;
 }
