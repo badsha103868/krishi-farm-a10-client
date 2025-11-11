@@ -8,4 +8,4 @@ const CropDetails = () => {
   );
 };
 
-export default CropDetails;
+export  default CropDetails;

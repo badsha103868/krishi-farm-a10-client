@@ -7,6 +7,7 @@ import AddCrop from "../Pages/AddCrop/AddCrop";
 import MyPosts from "../Pages/MyPosts/MyPosts";
 import MyInterests from "../Pages/MyInterests/MyInterests";
 import Profile from "../Pages/Profile/Profile";
+import CropDetails from "../Pages/CropDetails/CropDetails";
 
 
 
@@ -22,7 +23,13 @@ const router = createBrowserRouter([
     },
     {
       path: '/allCrops',
-      Component: AllCrops
+       loader:()=>fetch('http://localhost:3000/crops'),
+      Component: AllCrops,
+      
+    },
+    {
+       path:'/cropDetails',
+      Component:CropDetails
     },
     {
       path:'/myProfile',
