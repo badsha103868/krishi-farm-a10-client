@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLoaderData } from 'react-router';
+import { Link, } from 'react-router';
 
 const AllCrop = ({ crop }) => {
     const {image, name,pricePerUnit,type, _id, unit,location } = crop
