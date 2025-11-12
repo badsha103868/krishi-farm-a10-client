@@ -86,12 +86,10 @@ const AllCrops = () => {
 
                <MdErrorOutline className='text-6xl text-red-500 mb-4' />
 
-            <p className="text-center col-span-full text-red-500 text-5xl">No Result Found</p>
+            <p className="text-center col-span-full text-red-500 text-5xl mb-5">No Result Found</p>
  
 
-           <Link to='/allCrops'>
-            <button className='btn btn-primary text-white py-3 px-5 font-semibold mt-6'>Show All Crops</button>
-             </Link>
+           
             </div>
            )
       

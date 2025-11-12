@@ -8,6 +8,10 @@ import MyPosts from "../Pages/MyPosts/MyPosts";
 import MyInterests from "../Pages/MyInterests/MyInterests";
 import Profile from "../Pages/Profile/Profile";
 import CropDetails from "../Pages/CropDetails/CropDetails";
+import ErrorPage from "../Pages/ErrorPage/ErrorPage";
+import AuthLayout from "../Layout/AuthLayout/AuthLayout";
+import Login from "../Pages/Login/Login";
+import Register from "../Pages/Register/Register";
 
 
 
@@ -16,6 +20,7 @@ const router = createBrowserRouter([
   {
    path: "/",
    Component: Root,
+
    children: [
     {
       index: true,
@@ -50,6 +55,25 @@ const router = createBrowserRouter([
 
    ]
   },
+   {
+     path:'/auth',
+     Component:AuthLayout,
+     children:[
+     {
+         path:'/auth/login',
+         Component:Login
+     },
+     {
+         path:'/auth/register',
+         Component:Register
+     },
+    ]
+   },
+    
+     {
+      path: "/*",
+        element: <ErrorPage></ErrorPage>
+      },
 ]);
 
 export default router
