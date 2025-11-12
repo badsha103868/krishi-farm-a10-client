@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content'
 import { FaEye, FaRegEyeSlash } from 'react-icons/fa6';
+import { GoogleAuthProvider } from 'firebase/auth';
 
 const MySwal = withReactContent(Swal)
 
@@ -21,9 +22,12 @@ const Register = () => {
   
 
   // navigate
-  const navigate = useNavigate()
+  const navigate = useNavigate() 
+  const  googleProvider = new GoogleAuthProvider()
+    
 
-  const {createUser}= use(AuthContext);
+
+  const {createUser, googleSignIn}= use(AuthContext);
  
 
   const handleRegister=(e)=>{
@@ -83,7 +87,31 @@ const Register = () => {
         toast("please provide a valid info")
        })
 
-  }
+  }  
+
+   //   google sign in
+     const handleGoogleSignIn = ()=> {
+          googleSignIn(googleProvider)
+          .then(result =>{
+           const user = result.user;
+           console.log(user)
+   
+           toast.success("Log in successfully!");
+   
+           MySwal.fire({
+             title: "Register!",
+           text: "Registration successfully!",
+           icon: "success"
+              })
+           setTimeout(()=>{
+             navigate(location.state? location.state : '/');
+           },1000)
+          })
+          .catch(error=>{
+           console.log(error)
+          })
+     }
+    
 
     //  handleShowPassword
       const handleShowPassword=(e)=>{
@@ -154,7 +182,7 @@ const Register = () => {
         }
         </fieldset>
          <p className='font-semibold text-center mt-5'>All Ready Have An Account ? <Link className='text-secondary' to='/auth/login/'>Login</Link></p>
-          <button className='btn btn-secondary btn-outline w-full mt-4'><FcGoogle size={24} /> Register with Google</button>
+          <button onClick={handleGoogleSignIn}  className='btn btn-secondary btn-outline w-full mt-4'><FcGoogle size={24} /> Register with Google</button>
       </form>
 
     </div>

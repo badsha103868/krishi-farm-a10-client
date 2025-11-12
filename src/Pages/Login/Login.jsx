@@ -1,19 +1,107 @@
-import React, { use } from 'react';
+import React, { use, useState } from 'react';
 import { AuthContext } from '../../Provider/AuthProvider/AuthProvider';
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content'
+import { FaEye, FaRegEyeSlash } from 'react-icons/fa6';
+import { FcGoogle } from 'react-icons/fc';
+import { GoogleAuthProvider } from 'firebase/auth';
+
+const MySwal = withReactContent(Swal)
 
 const Login = () => { 
-  
-  const {createUser}= use(AuthContext);
+  // error state
+  const [error ,setError] = useState('')
+
+  //  show password state
+  const [showPassword, setShowPassword] = useState(false) 
+
+
+  // use location 
+  const location = useLocation()
+
+  // use navigate
+  const navigate   = useNavigate()
+
+   console.log(location)
+  const { signIn, googleSignIn }= use(AuthContext);
+
+    const  googleProvider = new GoogleAuthProvider()
 
   const handleLogin = (e)=>{
+     setError('')
     e.preventDefault()
+    
     const form= e.target;
     const email = form.email.value;
     const password = form.password.value;
     console.log(email, password)
     
+    signIn(email, password)
+    .then(result =>{
+      const user = result.user;
+      console.log(user)
+
+      
+     toast.success("Log in successfully!");
+     
+     
+          MySwal.fire({
+            title: "Login!",
+           text: "Login successfully!",
+           icon: "success"
+           })
+
+
+      setTimeout(() => {
+      navigate(location.state ? location.state : '/');
+       }, 1000); 
+       form.reset()
+    })
+    .catch(error =>{
+      console.log(error.message)
+      setError(error.message)
+      toast("Please provide a valid email or password")
+
+      form.reset()
+
+    })
   }
+
+
+  //   google sign in
+  const handleGoogleSignIn = ()=> {
+       googleSignIn(googleProvider)
+       .then(result =>{
+        const user = result.user;
+        console.log(user)
+
+        toast.success("Log in successfully!");
+
+        MySwal.fire({
+            title: "Login!",
+           text: "Login successfully!",
+           icon: "success"
+           })
+        setTimeout(()=>{
+          navigate(location.state? location.state : '/');
+        },1000)
+       })
+       .catch(error=>{
+        console.log(error)
+       })
+  }
+
+    // show password
+    const handleShowPassword =(e)=>{
+      e.preventDefault();
+      setShowPassword(!showPassword)
+     
+    } 
+
+
+
    
 
   return (
@@ -31,34 +119,46 @@ const Login = () => {
            className="input"
              name='email'
              
-            placeholder="Email"  />
+            placeholder="Email" required
+              onChange={() => setError('')}
+               />
+            
 
-            {/* password */}
+             {/* password */}
             
            <label className="label">Password</label>
-           {/* <div className='relative'> */}
+           <div className='relative'>
              <input 
-            type="password"
+            type={showPassword?"text": "password"}
              className="input"
               name='password'
            placeholder="Password" required 
-            />
+           onChange={() => setError('')}  />
 
-             {/* <button onClick={handleShowPassword} className='btn btn-xs top-2 right-5 absolute'>{showPassword? <FaRegEyeSlash /> : <FaEye />}</button>
-            </div> */}
+             <button onClick={handleShowPassword} className='btn btn-xs top-2 right-5 absolute'>{showPassword? <FaRegEyeSlash /> : <FaEye />}</button>
+            </div>
 
            {/* forget password */}
           <div className='mt-2'><Link to='/auth/forgetPassword/'  className="link link-hover text-green-600 hover:text-green-800 underline text-sm">Forgot password?</Link></div>
 
           {/*login  button */}
-          <button type="submit" className="btn btn-neutral bg-green-600 hover:bg-green-700 text-white mt-4">Login</button>
+          <button type="submit" className="btn btn-neutral bg-primary hover:bg-green-500 text-white mt-4">Login</button>
         
         {/* error showing  */}
-        {/* {
+        {
           error && <p className='text-secondary text-xs'>{error}</p>
-        } */}
+        }
 
         </fieldset>
+         
+           {/* Have not  An Account */}
+
+        <p className='font-semibold text-center mt-5'>Dont’t Have An Account ? <Link className='text-secondary' to='/auth/register/'>Register</Link></p>
+
+           {/* social login with google */}
+
+         <button onClick={handleGoogleSignIn} className='btn btn-secondary btn-outline w-full mt-4'><FcGoogle size={24} /> Login with Google</button>
+
         </form>
        </div>
     </div>
