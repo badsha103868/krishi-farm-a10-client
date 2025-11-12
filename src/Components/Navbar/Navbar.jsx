@@ -95,7 +95,7 @@ const Navbar = () => {
 
             <img className="w-[30px] h-[30px]  md:w-[35px] md:h-[35px] rounded-full " src={logoImg} alt="" />
          
-            <h3 className="font-medium md:font-semibold  lg:font-bold text-primary text-xl">Krishi Farm</h3>
+            <h3 className="font-medium md:font-semibold  lg:font-bold text-primary text-xl">Krishi <span className='text-secondary'>Farm</span></h3>
          </div>
       </div>
        {/* navbar center */}

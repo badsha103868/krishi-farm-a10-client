@@ -34,7 +34,8 @@ const router = createBrowserRouter([
       
     },
     {
-       path:'/cropDetails',
+       path:'/cropDetails/:id',
+       loader: ({params})=>fetch(`http://localhost:3000/crops/${params.id}`),
       element: <PrivateRoute>
          <CropDetails></CropDetails>
       </PrivateRoute>

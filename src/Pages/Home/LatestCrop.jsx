@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 const LatestCrop = ({ crop }) => {
   
    const {image, name,pricePerUnit,type, _id, unit } = crop
-
+   
   return (
      <div className="card bg-base-100 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
       <figure className="px-4 pt-4">
@@ -25,11 +25,12 @@ const LatestCrop = ({ crop }) => {
           Price: <span className="font-semibold text-green-600">{pricePerUnit} Tk</span> / {unit}
         </p>
         <div className="card-actions mt-3">
-          <Link to='/allCrops' className="btn btn-primary w-full">
+          <Link to={`/cropDetails/${_id}`} className="btn btn-primary w-full">
             View Details
           </Link>
         </div>
       </div>
+      
     </div>
   );
 };

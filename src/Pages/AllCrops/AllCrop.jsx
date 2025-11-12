@@ -26,7 +26,7 @@ const AllCrop = ({ crop }) => {
           Location: <span className="font-medium text-sm text-secondary">{location}</span>
         </p>
         <div className="card-actions mt-3">
-          <Link to='/cropDetails' className="btn btn-primary w-full">
+          <Link to={`/cropDetails/${_id}`} className="btn btn-primary w-full">
             View Details
           </Link>
         </div>

@@ -1,5 +1,6 @@
 import React, { use } from 'react';
 import LatestCrop from './LatestCrop';
+import { Link } from 'react-router';
 
 const LatestCrops = ({ latestCropsPromise }) => {
    const crops = use(latestCropsPromise)
@@ -16,6 +17,10 @@ const LatestCrops = ({ latestCropsPromise }) => {
          }
 
       </div>
+       
+       <div className='flex justify-center'>
+        <Link to='/allCrops' className='btn bg-green-500 text-xl text-white px-10 mt-5'>View All</Link>
+       </div>
     </div>
   );
 };
