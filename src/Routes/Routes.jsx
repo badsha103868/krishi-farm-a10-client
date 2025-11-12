@@ -12,6 +12,7 @@ import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 import AuthLayout from "../Layout/AuthLayout/AuthLayout";
 import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
+import PrivateRoute from "../Provider/PrivateRoute/PrivateRoute";
 
 
 
@@ -34,23 +35,34 @@ const router = createBrowserRouter([
     },
     {
        path:'/cropDetails',
-      Component:CropDetails
+      element: <PrivateRoute>
+         <CropDetails></CropDetails>
+      </PrivateRoute>
     },
     {
       path:'/myProfile',
-      Component: Profile
+       element: <PrivateRoute>
+         <Profile></Profile>
+      </PrivateRoute>
     },
     {
      path: '/addCrops',
-     Component: AddCrop
+       element: <PrivateRoute>
+         <AddCrop></AddCrop>
+      </PrivateRoute>
     },
     {
      path: '/myPosts',
-     Component: MyPosts
+       element: <PrivateRoute>
+         <MyPosts></MyPosts>
+      </PrivateRoute>
     },
     {
      path: '/myInterests',
-     Component: MyInterests
+       element: <PrivateRoute>
+         <MyInterests></MyInterests>
+      </PrivateRoute>
+    
     }, 
 
    ]

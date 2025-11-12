@@ -1,9 +1,37 @@
-import React from 'react';
+import React, { use } from 'react';
 import { Link, NavLink } from 'react-router';
 import logoImg from '../../assets/logoFarm2.jpeg'
+import userImg from '../../assets/icons8-avatar-48.png'
+import { AuthContext } from '../../Provider/AuthProvider/AuthProvider';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content'
+
+const MySwal = withReactContent(Swal)
 
 const Navbar = () => {
-   
+   const {user, logOut}= use(AuthContext) 
+
+
+   const handleLogOut = ()=>{
+    logOut()
+    .then(()=>{
+      toast.success("You Logged Out successfully")
+       MySwal.fire({
+            title: "Logged Out!",
+           text: "You Logged Out successfully!",
+           icon: "success"
+           })
+    })
+    .catch(error =>{
+      console.log(error.message)
+    })
+   }
+
+
+
+
+
   const links = (
     <>
       <li>
@@ -12,23 +40,24 @@ const Navbar = () => {
       <li>
         <NavLink to="/allCrops">All Crops</NavLink>
       </li>
-      
-      
-        <>
-          <li>
+       {
+        user&&(
+          <>
+            <li>
             <NavLink to="/myProfile">Profile</NavLink>
-          </li>
-          <li>
+        </li>
+        <li>
             <NavLink to="/addCrops">Add Crops</NavLink>
-          </li>
-          <li>
+         </li>
+         <li>
             <NavLink to="/myPosts">My Posts</NavLink>
-          </li>
-          <li>
+         </li>
+        <li>
             <NavLink to="/myInterests">My Interests</NavLink>
-          </li>
-        </>
-     
+        </li>
+         </>
+        )
+       }
     </>
   );
 
@@ -73,15 +102,25 @@ const Navbar = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
-      <div className="navbar-end space-x-1">
+      <div className="navbar-end ">
+
+         {
+          user?(<div className='flex items-center gap-1'>
+          <img  className="w-12 h-12 rounded-full bg-white" src={user.photoURL || userImg} alt="avatar" /> 
+            <button onClick={handleLogOut} className="btn btn-primary bg-[#2E7D32] px-2 md:px-5">Logout</button>
+            
+        
+          </div>):( <div className=" flex space-x-2">
+            <Link to='/auth/login/'> 
+            <button className="btn btn-primary bg-[#2E7D32] px-2 md:px-5">Login</button>
+            </Link>
+            <Link to='/auth/register'>
+            <button className="btn btn-secondary text-white  px-2 md:px-5">Register</button>
+            </Link>
+          </div>)
+         }
          
-          <Link to='/auth/login' className="btn btn-primary">
-            Login
-          </Link>
-         
-          <Link to="/auth/register" className="btn">
-            Register
-          </Link>
+          
       
       </div> 
     </div>
