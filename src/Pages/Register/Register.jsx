@@ -27,18 +27,18 @@ const Register = () => {
     
 
 
-  const {createUser, googleSignIn}= use(AuthContext);
+  const {createUser, googleSignIn , updateUser,user, setUser}= use(AuthContext);
  
 
   const handleRegister=(e)=>{
     e.preventDefault();
      const form = e.target
       const name = form.name.value;
-      const photoUrl = form.photoUrl.value;
+      const photoURL = form.photoURL.value;
       const email= form.email.value;
       const password = form.password.value;
 
-      console.log(name, photoUrl, email, password)
+      console.log(name, photoURL, email, password)
 
          //  email validation
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -63,8 +63,38 @@ const Register = () => {
        createUser(email, password)
       .then(result=>{
       const user = result.user;
-      console.log(user)
-      setSuccess(true)
+      console.log(user) 
+      //   update profile
+      updateUser({
+        displayName: name,
+        photoURL: photoURL
+      })
+         .then(()=>{
+          setUser({...user, displayName: name, photoURL: photoURL})
+         
+
+           const newUser = {
+        name: user.displayName,
+        email:user.email,
+        image: user.photoURL
+       }
+
+      //  create user in database
+      fetch('http://localhost:3000/users',{
+         method:"POST",
+         headers:{
+           'content-type':'application/json'
+         },
+         body: JSON.stringify(newUser)
+       })
+      .then(res =>res.json())
+      .then(data =>{
+        console.log('data after user save',data)
+      })
+    
+      
+            
+        setSuccess(true)
       toast.success("Registration successfully!")
        
        MySwal.fire({
@@ -72,12 +102,21 @@ const Register = () => {
            text: "Registration successfully!",
            icon: "success"
            })
-
+          
            form.reset();
 
             setTimeout(()=>{
               navigate('/')
             }, 1000)
+
+         })
+          .catch(error=>{
+          console.log(error.message)
+          setUser(user)
+         })
+       
+
+      
        
 
        })
@@ -95,6 +134,25 @@ const Register = () => {
           .then(result =>{
            const user = result.user;
            console.log(user)
+
+         const newUser = {
+        name: user.displayName,
+        email:user.email,
+        image: user.photoURL
+       }
+
+           //  create user in database
+      fetch('http://localhost:3000/users',{
+         method:"POST",
+         headers:{
+           'content-type':'application/json'
+         },
+         body: JSON.stringify(newUser)
+       })
+      .then(res =>res.json())
+      .then(data =>{
+        console.log('data after user save',data)
+      })
    
            toast.success("Log in successfully!");
    
@@ -141,7 +199,7 @@ const Register = () => {
           <input 
           type="text" 
           className="input" 
-          name='photoUrl'
+          name='photoURL'
           placeholder="Your Photo URL"  />
           {/* email */}
           <label className="label">Email</label>

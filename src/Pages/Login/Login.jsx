@@ -76,6 +76,26 @@ const Login = () => {
        .then(result =>{
         const user = result.user;
         console.log(user)
+         
+         const newUser = {
+        name: user.displayName,
+        email:user.email,
+        image: user.photoURL
+       }
+
+           //  create user in database
+      fetch('http://localhost:3000/users',{
+         method:"POST",
+         headers:{
+           'content-type':'application/json'
+         },
+         body: JSON.stringify(newUser)
+       })
+      .then(res =>res.json())
+      .then(data =>{
+        console.log('data after user save',data)
+      })
+
 
         toast.success("Log in successfully!");
 
