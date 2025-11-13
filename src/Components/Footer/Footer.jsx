@@ -84,7 +84,7 @@ const Footer = () => {
                   <MdOutlinePhoneInTalk size={20}/>
                 <div>
                   <div className="font-medium">Phone</div>
-                  <a href="tel:+8801712345678" className="text-sm opacity-90 hover:underline">+880 1712-345678</a>
+                  <a href="tel:+8801712345678" className="text-sm opacity-90 hover:underline">+880 1639-889767</a>
                 </div>
               </li>
             </ul>

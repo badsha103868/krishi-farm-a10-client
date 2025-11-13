@@ -29,9 +29,7 @@ const CropInformation = ({ crop }) => {
           </p>
         </div>
 
-        <button className="mt-4 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded shadow-lg w-1/2">
-          Send Interest 💌
-        </button>
+        
       </div>
     </div>
   );
