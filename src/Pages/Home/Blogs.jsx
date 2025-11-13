@@ -33,8 +33,8 @@ const Blogs = () => {
   }, []);
 
   return (
-    <div className="my-10 px-4">
-      <h1 className="text-3xl font-bold text-center text-green-700 mb-8">Krishi Farm Blogs</h1>
+    <div className="my-10 ">
+      <h1 className="text-3xl font-bold text-center text-green-700 mb-8">Krishi Farm <span className="text-secondary">Blogs</span></h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {blogs.map(blog => (
           <BlogCard key={blog.id} blog={blog} />

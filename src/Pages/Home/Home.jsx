@@ -5,6 +5,7 @@ import HeroSlider from './HeroSlider';
 import MeetExpert from './MeetExpert';
 import WorkSection from './WorkSection';
 import Blogs from './Blogs';
+import TestimonialsSection from './TestimonialsSection';
 
   const latestCropsPromise = fetch('http://localhost:3000/latestCrops')
   .then(res => res.json())
@@ -15,6 +16,7 @@ const Home = () => {
        <HeroSlider></HeroSlider>
       <LatestCrops latestCropsPromise={latestCropsPromise}></LatestCrops>
       <WorkSection></WorkSection>
+      <TestimonialsSection></TestimonialsSection>
       <MeetExpert></MeetExpert>
       <Blogs></Blogs>
     </div>
