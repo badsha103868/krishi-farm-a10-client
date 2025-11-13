@@ -1,18 +1,18 @@
-import React from 'react';
-import { useLoaderData } from 'react-router';
-import CropInformation from './CropInformation';
-import InterestSection from './InterestSection';
+import React, { useState } from "react";
+import { useLoaderData } from "react-router";
+import CropInformation from "./CropInformation";
+import InterestSection from "./InterestSection";
 
 const CropDetails = () => {
-  const crop = useLoaderData();
-  console.log(crop)
+  const loadedCrop = useLoaderData();
+  const [crop, setCrop] = useState(loadedCrop); // ✅ crop state manage here
 
   return (
-    <div className='my-2'>
-        <CropInformation crop={crop}></CropInformation>
-        <InterestSection crop={crop}></InterestSection>
+    <div className="my-4">
+      <CropInformation crop={crop} />
+      <InterestSection crop={crop} setCrop={setCrop} />
     </div>
   );
 };
 
-export  default CropDetails;
+export default CropDetails;
