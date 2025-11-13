@@ -42,9 +42,27 @@ const InterestSection = ({ crop }) => {
    
   // modal open
   const handleInterestModalOpen =()=>{
-    interestModalRef.current.showModal();
+     if (!quantity || quantity <= 0) {
+    MySwal.fire({
+      icon: "warning",
+      title: "Invalid Quantity",
+      text: "Please enter a valid quantity greater than 0.",
+    });
+    return;
   }
 
+  if (!message.trim()) {
+    MySwal.fire({
+      icon: "warning",
+      title: "Message Required",
+      text: "Please write a short message before submitting.",
+    });
+    return;
+  }
+    interestModalRef.current.showModal();
+  }
+   
+  
 
    
   // Handle interest submit
@@ -110,45 +128,61 @@ const InterestSection = ({ crop }) => {
   if (isOwner) {
     return (
       <div className="mt-8 p-4 border rounded-xl bg-green-50 shadow-sm">
-        <h2 className="text-xl font-bold mb-3 text-green-700">
+        <h2 className="text-xl text-center font-bold mb-3 text-green-700">
           Received Interest Requests
         </h2>
-
-        {crop.interests?.length > 0 ? (
-          crop.interests.map((interest) => (
-            <div
-              key={interest._id}
-              className="border p-3 mb-3 rounded-lg bg-white shadow-sm"
-            >
-              <p className="font-semibold text-gray-800">
-                Buyer: {interest.userName}
-              </p>
-              <p>Email: {interest.userEmail}</p>
-              <p>Quantity: {interest.quantity}</p>
-              <p>Message: {interest.message}</p>
-              <p>
-                Status:{" "}
-                <span
-                  className={`font-semibold ${
-                    interest.status === "pending"
-                      ? "text-yellow-500"
-                      : interest.status === "accepted"
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }`}
-                >
-                  {interest.status}
-                </span>
-              </p>
-              <div className="flex gap-3 mt-2">
+        {
+          crop.interests?.length > 0? ( <div className="overflow-x-auto">
+          <table className="table">
+            {/* head */}
+            <thead>
+              <tr>
+                <th>
+                  SL No.
+                </th>
+                <th>Buyer Name</th>
+                <th>Quantity</th>
+                <th>Message</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* row 1 */}
+              
+           {
+           crop.interests.map((interest, index) => <tr key={interest._id}>
+                <th>
+                  {index +1}
+                </th>
+                <td>                    
+                      {interest.userName}
+                </td>
+                <td>
+                  {interest.quantity}
+                </td>
+                <td>{interest.message}</td>
+                <td className="text-primary">{interest.status}</td>
+                <td>
+                  <div className="flex gap-3 mt-2">
                 <button className="btn btn-success btn-sm">Accept</button>
                 <button className="btn btn-error btn-sm">Reject</button>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500">No interests yet.</p>
-        )}
+                 </div>
+              </td>
+                
+              </tr>)
+           }
+              
+             
+            </tbody>
+           
+           
+          </table>
+           </div>):(<p className=" text-secondary text-xl text-center">No interests yet.</p>)
+        }
+         
+
+       
       </div>
     );
   }
@@ -170,6 +204,7 @@ const InterestSection = ({ crop }) => {
             type="number"
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
+            min="1"
             required
             className="input input-bordered w-full"
             placeholder="Enter desired quantity"

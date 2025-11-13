@@ -13,6 +13,7 @@ import AuthLayout from "../Layout/AuthLayout/AuthLayout";
 import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
 import PrivateRoute from "../Provider/PrivateRoute/PrivateRoute";
+import UpdateForm from "../Pages/Profile/UpdateForm";
 
 
 
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
          <Profile></Profile>
       </PrivateRoute>
     },
+     {
+        path:'/updateForm',
+        element:<UpdateForm></UpdateForm>
+      },
     {
      path: '/addCrops',
        element: <PrivateRoute>
