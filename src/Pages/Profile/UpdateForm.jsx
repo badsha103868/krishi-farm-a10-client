@@ -90,7 +90,7 @@ const UpdateForm = () => {
           defaultValue={user?.photoURL}
           placeholder="Your Photo URL" required />
           
-          <button  className="btn  bg-green-500 text-white mt-4">Update Profile</button>
+          <button  className="btn btn-primary text-white mt-4">Update Profile</button>
           {
           error && <p className='text-secondary text-xs'>{error}</p>
           }
