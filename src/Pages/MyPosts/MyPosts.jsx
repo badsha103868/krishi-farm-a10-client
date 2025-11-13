@@ -1,43 +1,39 @@
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../../Provider/AuthProvider/AuthProvider';
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
-
-
-
 const MySwal = withReactContent(Swal);
 
 const MyPosts = () => {
-  const { user }= use(AuthContext)
-   const [myCrops, setMyCrops]= useState([])
+  const { user } = useContext(AuthContext);
+  const [myCrops, setMyCrops] = useState([]);
 
-     // edit modal state
+  // Edit modal state
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [currentCrop, setCurrentCrop] = useState(null);
-   
-   
-   useEffect(()=>{
-    if(user?.email){
-      fetch(`http://localhost:3000/myCrops?email=${user.email}`)
-      .then(res => res.json())
-      .then(data =>{
-        setMyCrops(data)
-      })
-    }
-  },[user?.email])
 
-    // Open edit modal
+  // Fetch user's crops
+  useEffect(() => {
+    if (user?.email) {
+      fetch(`http://localhost:3000/myCrops?email=${user.email}`)
+        .then(res => res.json())
+        .then(data => setMyCrops(data))
+        .catch(err => console.error(err));
+    }
+  }, [user?.email]);
+
+  // Open edit modal
   const handleEdit = (crop) => {
     setCurrentCrop(crop);
     setEditModalOpen(true);
   };
-  
-   // handle update
+
+  // Handle update
   const handleUpdate = (e) => {
     e.preventDefault();
     fetch(`http://localhost:3000/myCrops/${currentCrop._id}`, {
-      method: "PUT",
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(currentCrop)
     })
@@ -47,9 +43,8 @@ const MyPosts = () => {
           Swal.fire({
             icon: "success",
             title: "Updated!",
-            text: "Crop updated successfully."
+            text: "Crop updated successfully.",
           });
-          // update UI
           const updatedCrops = myCrops.map(c =>
             c._id === currentCrop._id ? currentCrop : c
           );
@@ -59,18 +54,14 @@ const MyPosts = () => {
           Swal.fire({
             icon: "error",
             title: "Oops!",
-            text: data.message || "Update failed."
+            text: data.message || "Update failed.",
           });
         }
-      });
+      })
+      .catch(err => console.error(err));
   };
 
-
-
-
-
-
-     // Delete Crop
+  // Handle delete
   const handleDelete = (_id) => {
     MySwal.fire({
       title: "Are you sure?",
@@ -84,44 +75,35 @@ const MyPosts = () => {
         fetch(`http://localhost:3000/myCrops/${_id}`, {
           method: "DELETE",
         })
-          .then((res) => res.json())
-          .then((data) => {
-            if(data.deletedCount){
-          Swal.fire({
-          title: "Deleted!",
-          text: "Your Post has been deleted.",
-           icon: "success"
-        });
-         const remainingCrops = myCrops.filter(crop=> crop._id !== _id)
-          setMyCrops(remainingCrops)
-
+          .then(res => res.json())
+          .then(data => {
+            if (data.deletedCount) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your Post has been deleted.",
+                icon: "success"
+              });
+              const remainingCrops = myCrops.filter(crop => crop._id !== _id);
+              setMyCrops(remainingCrops);
             }
           })
-          .catch((err) => console.error(err));
+          .catch(err => console.error(err));
       }
     });
   };
 
-  
-   
- 
-    
-
-
   return (
     <div className="mt-8 p-4 border rounded-xl bg-green-50 shadow-sm my-5">
-        <h2 className="text-xl text-center font-bold mb-3 text-green-700">
-          My Crop Post
-        </h2>
-        {
-          myCrops.length > 0? ( <div className="overflow-x-auto">
+      <h2 className="text-xl text-center font-bold mb-3 text-green-700">
+        My Crop Post
+      </h2>
+
+      {myCrops.length > 0 ? (
+        <div className="overflow-x-auto">
           <table className="table">
-            {/* head */}
             <thead>
               <tr>
-                <th>
-                  SL No.
-                </th>
+                <th>SL No.</th>
                 <th>Name</th>
                 <th>Type</th>
                 <th>Quantity</th>
@@ -130,185 +112,107 @@ const MyPosts = () => {
               </tr>
             </thead>
             <tbody>
-              {/* row 1 */}
-              
-           {
-           myCrops.map((myCrop, index) => <tr key={myCrop._id}>
-                <th>
-                  {index +1}
-                </th>
-                <td>                    
-                      {myCrop.name}
-                </td>
-                <td>
-                  {myCrop.type}
-                </td>
-                <td>{myCrop.quantity}</td>
-                <td>{myCrop.pricePerUnit}/{myCrop.unit}</td>
-                <td>
-                  <div className="flex gap-3 mt-2">
-                <button onClick={() => handleEdit(myCrop)} className="btn btn-success btn-sm">Edit</button>
-
-
-                <button onClick={()=> handleDelete(myCrop._id)} className="btn btn-error btn-sm">Delete</button>
-                 </div>
-              </td>
-                
-              </tr>)
-           }
-              
-             
+              {myCrops.map((myCrop, index) => (
+                <tr key={myCrop._id}>
+                  <th>{index + 1}</th>
+                  <td>{myCrop.name}</td>
+                  <td>{myCrop.type}</td>
+                  <td>{myCrop.quantity}</td>
+                  <td>{myCrop.pricePerUnit}/{myCrop.unit}</td>
+                  <td>
+                    <div className="flex gap-3 mt-2">
+                      <button
+                        onClick={() => handleEdit(myCrop)}
+                        className="btn btn-success btn-sm"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(myCrop._id)}
+                        className="btn btn-error btn-sm"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
-           
-           
           </table>
-           </div>):(<p className=" text-secondary text-xl text-center">No interests yet.</p>)
-        }
-         
-         {/* Edit Modal */}
-     {editModalOpen && currentCrop && (
-  <dialog open className="modal">
-    <div className="modal-box">
-      <h3 className="font-bold text-lg mb-2">Edit Crop</h3>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-
-          fetch(`http://localhost:3000/myCrops/${currentCrop._id}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              name: currentCrop.name,
-              type: currentCrop.type,
-              pricePerUnit: Number(currentCrop.pricePerUnit),
-              unit: currentCrop.unit,
-              quantity: Number(currentCrop.quantity),
-              description: currentCrop.description,
-              location: currentCrop.location,
-              image: currentCrop.image,
-            }),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.success) {
-                Swal.fire({
-                  icon: "success",
-                  title: "Updated!",
-                  text: "Crop updated successfully.",
-                });
-
-                // UI update
-                const updatedCrops = myCrops.map((c) =>
-                  c._id === currentCrop._id ? currentCrop : c
-                );
-                setMyCrops(updatedCrops);
-
-                // close modal
-                setEditModalOpen(false);
-              } else {
-                Swal.fire({
-                  icon: "error",
-                  title: "Oops!",
-                  text: data.message || "Update failed.",
-                });
-              }
-            })
-            .catch((err) => console.error(err));
-        }}
-        className="space-y-3"
-      >
-        <input
-          type="text"
-          className="input w-full"
-          value={currentCrop.name}
-          onChange={(e) =>
-            setCurrentCrop({ ...currentCrop, name: e.target.value })
-          }
-          required
-        />
-        <input
-          type="text"
-          className="input w-full"
-          value={currentCrop.type}
-          onChange={(e) =>
-            setCurrentCrop({ ...currentCrop, type: e.target.value })
-          }
-          required
-        />
-        <input
-          type="number"
-          className="input w-full"
-          value={currentCrop.pricePerUnit}
-          onChange={(e) =>
-            setCurrentCrop({ ...currentCrop, pricePerUnit: e.target.value })
-          }
-          required
-        />
-        <input
-          type="text"
-          className="input w-full"
-          value={currentCrop.unit}
-          onChange={(e) =>
-            setCurrentCrop({ ...currentCrop, unit: e.target.value })
-          }
-          required
-        />
-        <input
-          type="number"
-          className="input w-full"
-          value={currentCrop.quantity}
-          onChange={(e) =>
-            setCurrentCrop({ ...currentCrop, quantity: e.target.value })
-          }
-          required
-        />
-        <input
-          type="text"
-          className="input w-full"
-          value={currentCrop.description}
-          onChange={(e) =>
-            setCurrentCrop({ ...currentCrop, description: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          className="input w-full"
-          value={currentCrop.location}
-          onChange={(e) =>
-            setCurrentCrop({ ...currentCrop, location: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          className="input w-full"
-          value={currentCrop.image}
-          onChange={(e) =>
-            setCurrentCrop({ ...currentCrop, image: e.target.value })
-          }
-        />
-        <div className="modal-action">
-          <button type="submit" className="btn btn-primary">
-            Update
-          </button>
-          <button
-            type="button"
-            className="btn"
-            onClick={() => setEditModalOpen(false)}
-          >
-            Cancel
-          </button>
         </div>
-      </form>
+      ) : (
+        <p className="text-secondary text-xl text-center">No crops found.</p>
+      )}
+
+      {/* Edit Modal */}
+      {editModalOpen && currentCrop && (
+        <dialog open className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg mb-2">Edit Crop</h3>
+            <form onSubmit={handleUpdate} className="space-y-3">
+              <input
+                type="text"
+                className="input w-full"
+                value={currentCrop.name}
+                onChange={e => setCurrentCrop({ ...currentCrop, name: e.target.value })}
+                required
+              />
+              <input
+                type="text"
+                className="input w-full"
+                value={currentCrop.type}
+                onChange={e => setCurrentCrop({ ...currentCrop, type: e.target.value })}
+                required
+              />
+              <input
+                type="number"
+                className="input w-full"
+                value={currentCrop.pricePerUnit}
+                onChange={e => setCurrentCrop({ ...currentCrop, pricePerUnit: e.target.value })}
+                required
+              />
+              <input
+                type="text"
+                className="input w-full"
+                value={currentCrop.unit}
+                onChange={e => setCurrentCrop({ ...currentCrop, unit: e.target.value })}
+                required
+              />
+              <input
+                type="number"
+                className="input w-full"
+                value={currentCrop.quantity}
+                onChange={e => setCurrentCrop({ ...currentCrop, quantity: e.target.value })}
+                required
+              />
+              <input
+                type="text"
+                className="input w-full"
+                value={currentCrop.description}
+                onChange={e => setCurrentCrop({ ...currentCrop, description: e.target.value })}
+              />
+              <input
+                type="text"
+                className="input w-full"
+                value={currentCrop.location}
+                onChange={e => setCurrentCrop({ ...currentCrop, location: e.target.value })}
+              />
+              <input
+                type="text"
+                className="input w-full"
+                value={currentCrop.image}
+                onChange={e => setCurrentCrop({ ...currentCrop, image: e.target.value })}
+              />
+              <div className="modal-action">
+                <button type="submit" className="btn btn-primary">Update</button>
+                <button type="button" className="btn" onClick={() => setEditModalOpen(false)}>Cancel</button>
+              </div>
+            </form>
+          </div>
+        </dialog>
+      )}
     </div>
-  </dialog>
-)}
-
-
-       
-      </div>
   );
 };
 
 export default MyPosts;
-
-
