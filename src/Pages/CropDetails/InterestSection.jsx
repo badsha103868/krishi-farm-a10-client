@@ -1,76 +1,63 @@
-import React, { use, useEffect, useRef, useState } from "react";
-
+import React, { useEffect, useRef, useState, useContext } from "react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { AuthContext } from "../../Provider/AuthProvider/AuthProvider";
 
 const MySwal = withReactContent(Swal);
 
-const InterestSection = ({ crop }) => {
-  const { user } = use(AuthContext);
+const InterestSection = ({ crop, setCrop }) => {
+  const { user } = useContext(AuthContext);
   const [quantity, setQuantity] = useState("");
   const [message, setMessage] = useState("");
-  const [totalPrice , setTotalPrice] = useState(0);
-  const [hasSentInterest, setHasSentInterest]= useState(false)
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [hasSentInterest, setHasSentInterest] = useState(false);
 
-    // modal ref
   const interestModalRef = useRef(null);
-   
-
-
   const isOwner = user?.email === crop?.owner?.ownerEmail;
 
-
-  // auto calculation total  price
-  useEffect(()=>{
-    if(quantity && crop?.pricePerUnit){
-      setTotalPrice(quantity * crop.pricePerUnit)
-    }
-    else {
+  // Auto calculate total price
+  useEffect(() => {
+    if (quantity && crop?.pricePerUnit) {
+      setTotalPrice(quantity * crop.pricePerUnit);
+    } else {
       setTotalPrice(0);
     }
-  },[quantity, crop?.pricePerUnit])
+  }, [quantity, crop?.pricePerUnit]);
 
-  // hasSentInterest check
-  useEffect(()=>{
-    if(crop?.interests?.length>0 && user?.email){
-      const alreadySent = crop.interests.find(interest=> interest.userEmail === user.email)
-      setHasSentInterest(alreadySent)
+  // Check if buyer already sent interest
+  useEffect(() => {
+    if (crop?.interests?.length > 0 && user?.email) {
+      const alreadySent = crop.interests.find(
+        (interest) => interest.userEmail === user.email
+      );
+      setHasSentInterest(alreadySent);
     }
-  },[crop?.interests, user?.email])
+  }, [crop?.interests, user?.email]);
 
-   
-  // modal open
-  const handleInterestModalOpen =()=>{
-     if (!quantity || quantity <= 0) {
-    MySwal.fire({
-      icon: "warning",
-      title: "Invalid Quantity",
-      text: "Please enter a valid quantity greater than 0.",
-    });
-    return;
-  }
-
-  if (!message.trim()) {
-    MySwal.fire({
-      icon: "warning",
-      title: "Message Required",
-      text: "Please write a short message before submitting.",
-    });
-    return;
-  }
+  // Buyer modal open
+  const handleInterestModalOpen = () => {
+    if (!quantity || quantity <= 0) {
+      MySwal.fire({
+        icon: "warning",
+        title: "Invalid Quantity",
+        text: "Please enter a valid quantity greater than 0.",
+      });
+      return;
+    }
+    if (!message.trim()) {
+      MySwal.fire({
+        icon: "warning",
+        title: "Message Required",
+        text: "Please write a short message before submitting.",
+      });
+      return;
+    }
     interestModalRef.current.showModal();
-  }
-   
-  
+  };
 
-   
-  // Handle interest submit
+  // Buyer submit interest
   const handleConfirmSubmit = (e) => {
     e.preventDefault();
-
-     
-
     const newInterest = {
       userEmail: user.email,
       userName: user.displayName,
@@ -80,9 +67,7 @@ const InterestSection = ({ crop }) => {
 
     fetch(`http://localhost:3000/crops/${crop._id}/interests`, {
       method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newInterest),
     })
       .then((res) => res.json())
@@ -93,10 +78,11 @@ const InterestSection = ({ crop }) => {
             title: "Interest Sent!",
             text: "Your interest has been successfully submitted.",
           });
+          crop.interests.push(data.interest);
+          setHasSentInterest(true);
           setQuantity("");
           setMessage("");
-           setTotalPrice(0);
-          setHasSentInterest(true);
+          setTotalPrice(0);
           interestModalRef.current.close();
         } else {
           MySwal.fire({
@@ -106,8 +92,8 @@ const InterestSection = ({ crop }) => {
           });
         }
       })
-      .catch((error) => {
-        console.error(error);
+      .catch((err) => {
+        console.error(err);
         MySwal.fire({
           icon: "error",
           title: "Server Error",
@@ -115,142 +101,188 @@ const InterestSection = ({ crop }) => {
         });
       });
   };
-   
-        
 
+  // Owner Accept/Reject Interest
+  const handleAction = (interestId, action) => {
+    fetch(
+      `http://localhost:3000/crops/${crop._id}/interests/${interestId}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: action }),
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          MySwal.fire({
+            icon: "success",
+            title: `Interest ${action}`,
+            text: `Interest has been ${action} successfully.`,
+          });
 
+          // Update UI instantly
+          const updatedInterests = crop.interests.map((i) =>
+            i._id === interestId ? { ...i, status: action } : i
+          );
 
+          let updatedQuantity = crop.quantity;
+          if (action === "accepted") {
+            const interest = crop.interests.find((i) => i._id === interestId);
+            updatedQuantity =
+              updatedQuantity - interest.quantity >= 0
+                ? updatedQuantity - interest.quantity
+                : 0;
+          }
 
+          setCrop({ ...crop, interests: updatedInterests, quantity: updatedQuantity });
+        } else {
+          MySwal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: data.message || "Action failed.",
+          });
+        }
+      });
+  };
 
-  // Owner view 
-
-
+  // Owner view
   if (isOwner) {
     return (
       <div className="mt-8 p-4 border rounded-xl bg-green-50 shadow-sm">
         <h2 className="text-xl text-center font-bold mb-3 text-green-700">
           Received Interest Requests
         </h2>
-        {
-          crop.interests?.length > 0? ( <div className="overflow-x-auto">
-          <table className="table">
-            {/* head */}
-            <thead>
-              <tr>
-                <th>
-                  SL No.
-                </th>
-                <th>Buyer Name</th>
-                <th>Quantity</th>
-                <th>Message</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* row 1 */}
-              
-           {
-           crop.interests.map((interest, index) => <tr key={interest._id}>
-                <th>
-                  {index +1}
-                </th>
-                <td>                    
-                      {interest.userName}
-                </td>
-                <td>
-                  {interest.quantity}
-                </td>
-                <td>{interest.message}</td>
-                <td className="text-primary">{interest.status}</td>
-                <td>
-                  <div className="flex gap-3 mt-2">
-                <button className="btn btn-success btn-sm">Accept</button>
-                <button className="btn btn-error btn-sm">Reject</button>
-                 </div>
-              </td>
-                
-              </tr>)
-           }
-              
-             
-            </tbody>
-           
-           
-          </table>
-           </div>):(<p className=" text-secondary text-xl text-center">No interests yet.</p>)
-        }
-         
-
-       
+        {crop.interests?.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="table w-full">
+              <thead>
+                <tr>
+                  <th>SL No.</th>
+                  <th>Buyer Name</th>
+                  <th>Quantity</th>
+                  <th>Message</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {crop.interests.map((interest, index) => (
+                  <tr key={interest._id}>
+                    <th>{index + 1}</th>
+                    <td>{interest.userName}</td>
+                    <td>{interest.quantity}</td>
+                    <td>{interest.message}</td>
+                    <td>
+                      <span
+                        className={`badge ${
+                          interest.status === "pending"
+                            ? "badge-warning"
+                            : interest.status === "accepted"
+                            ? "badge-success"
+                            : "badge-error"
+                        }`}
+                      >
+                        {interest.status.charAt(0).toUpperCase() +
+                          interest.status.slice(1)}
+                      </span>
+                    </td>
+                    <td>
+                      {interest.status === "pending" && (
+                        <div className="flex gap-2">
+                          <button
+                            className="btn btn-success btn-sm"
+                            onClick={() => handleAction(interest._id, "accepted")}
+                          >
+                            Accept
+                          </button>
+                          <button
+                            className="btn btn-error btn-sm"
+                            onClick={() => handleAction(interest._id, "rejected")}
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="text-secondary text-xl text-center">No interests yet.</p>
+        )}
       </div>
     );
   }
-    
-  // Buyer view (not owner)
+
+  // Buyer view
   return (
-    <div className="mt-8  p-6 rounded-xl bg-white shadow-md">
+    <div className="mt-8 p-6 rounded-xl bg-white shadow-md">
       <h2 className="text-xl text-center font-bold mb-4 text-green-600">
         Send Your Interest
       </h2>
-    {
-      hasSentInterest ? (<div className="text-center text-gray-600 font-medium bg-green-50 p-5 rounded-lg">
-         You’ve already sent an interest for this crop.
-        </div>):(  
-           <form  className="space-y-3">
-        <div>
-          <label className="block mb-1 font-semibold">Quantity (kg)</label>
-          <input
-            type="number"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-            min="1"
-            required
-            className="input input-bordered w-full"
-            placeholder="Enter desired quantity"
-          />
+      {hasSentInterest ? (
+        <div className="text-center text-gray-600 font-medium bg-green-50 p-5 rounded-lg">
+          You’ve already sent an interest for this crop.
         </div>
-        <div>
-          <label className="block mb-1 font-semibold">Total Price (৳)</label>
-          <input
-            type="number"
-            value={totalPrice}
-            readOnly
-            className="input input-bordered w-full"
-            
-          />
-           <p className="text-sm text-gray-500 mt-1">
-            Unit Price: ৳{crop.pricePerUnit} per {crop.unit}
-          </p>
-        </div>
-        <div>
-          <label className="block mb-1 font-semibold">Message</label>
-          <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            required
-            className="textarea textarea-bordered w-full"
-            placeholder="Write your message..."
-          ></textarea>
-        </div>
-        <button  onClick={handleInterestModalOpen}
-          type="button"
-          className="btn bg-primary hover:bg-green-500 text-white w-full"
-        >
-          Submit Interest
-        </button>
-      </form>
-        
-      )
-    }
-   
-      {/*  Confirmation Modal */}
+      ) : (
+        <form className="space-y-3">
+          <div>
+            <label className="block mb-1 font-semibold">Quantity (kg)</label>
+            <input
+              type="number"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+              min="1"
+              required
+              className="input input-bordered w-full"
+              placeholder="Enter desired quantity"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 font-semibold">Total Price (৳)</label>
+            <input
+              type="number"
+              value={totalPrice}
+              readOnly
+              className="input input-bordered w-full"
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              Unit Price: ৳{crop.pricePerUnit} per {crop.unit}
+            </p>
+          </div>
+          <div>
+            <label className="block mb-1 font-semibold">Message</label>
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              required
+              className="textarea textarea-bordered w-full"
+              placeholder="Write your message..."
+            ></textarea>
+          </div>
+          <button
+            onClick={handleInterestModalOpen}
+            type="button"
+            className="btn bg-primary hover:bg-green-500 text-white w-full"
+          >
+            Submit Interest
+          </button>
+        </form>
+      )}
+
+      {/* Confirmation Modal */}
       <dialog ref={interestModalRef} className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg mb-2">Confirm Your Interest</h3>
           <p className="text-gray-600">
             Are you sure you want to send interest for{" "}
-            <strong>{quantity} kg {crop.name}</strong>?
+            <strong>
+              {quantity} kg {crop.name}
+            </strong>
+            ?
           </p>
           <p className="mt-2">
             Total Price: <strong>৳{totalPrice}</strong>
@@ -268,8 +300,6 @@ const InterestSection = ({ crop }) => {
           </div>
         </div>
       </dialog>
-
-     
     </div>
   );
 };
