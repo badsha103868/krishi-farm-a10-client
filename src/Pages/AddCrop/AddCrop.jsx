@@ -1,8 +1,9 @@
-import React, { use } from 'react';
+import React, { use, useState } from 'react';
 import { AuthContext } from '../../Provider/AuthProvider/AuthProvider';
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useNavigate } from 'react-router';
+import Loading from '../Loading/Loading';
 
 
 
@@ -10,7 +11,10 @@ const MySwal = withReactContent(Swal);
 
 
 const AddCrop = () => {
-const { user } = use(AuthContext)
+const { user ,loading: authLoading  } = use(AuthContext) 
+ const [loading, setLoading] = useState(false);
+
+
 const navigate = useNavigate()
     
   const handleAddCrop=(e)=>{
@@ -44,7 +48,7 @@ const navigate = useNavigate()
   },
   createdAt: new Date()
 }; 
-
+   setLoading(true);
   fetch("http://localhost:3000/crops", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
@@ -52,6 +56,7 @@ const navigate = useNavigate()
   })
   .then(res=>res.json())
   .then(data =>{
+    setLoading(false)
     if(data.insertedId){
        Swal.fire({
         icon: "success",
@@ -67,7 +72,9 @@ const navigate = useNavigate()
 
   }
   
-
+ if (authLoading || loading) {
+    return <Loading />
+  }
   return (
      <div className='flex justify-center items-center  min-h-screen my-5'>
       <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl ">

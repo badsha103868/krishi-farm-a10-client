@@ -43,10 +43,7 @@ const [loading, setLoading ]=useState(true)
     return signInWithPopup(auth, googleProvider)
   } 
 
-  // update profile
-   
-
-  // forget password
+  
 
 
   // onAuthStateChanged observer

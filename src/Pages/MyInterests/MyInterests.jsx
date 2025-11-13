@@ -1,17 +1,26 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider/AuthProvider";
+import Loading from "../Loading/Loading";
 
 const MyInterests = () => {
-  const { user } = useContext(AuthContext);
+  const { user, loading: authLoading } = useContext(AuthContext);
   const [interests, setInterests] = useState([]);
-  const [sortOrder, setSortOrder] = useState("asc"); // Default ascending
-
+  const [sortOrder, setSortOrder] = useState("asc"); 
+  const [loading, setLoading] = useState(false);
+  
   useEffect(() => {
     if (user?.email) {
+      setLoading(true)
       fetch(`http://localhost:3000/myInterests?email=${user.email}`)
         .then((res) => res.json())
-        .then((data) => setInterests(data))
-        .catch((err) => console.error(err));
+        .then((data) => {
+           setInterests(data) 
+          setLoading(false)
+        })
+        .catch((err) =>{
+          console.error(err)
+          setLoading(false)
+        } )
     }
   }, [user?.email]);
 
@@ -25,7 +34,11 @@ const MyInterests = () => {
     setInterests(sorted);
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
-
+    if(loading){
+      return <Loading></Loading>
+      
+     
+    }
   return (
     <div className="mt-8 p-4 border rounded-xl bg-green-50 shadow-sm my-5">
       <h2 className="text-xl font-bold text-center mb-4 text-green-700">

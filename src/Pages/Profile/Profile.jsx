@@ -1,14 +1,20 @@
-import React, { use } from 'react';
+import React, { use, useState } from 'react';
 
 import userImg from '../../assets/icons8-avatar-48.png'
 import { Link,  } from 'react-router';
 import { AuthContext } from '../../Provider/AuthProvider/AuthProvider';
+import Loading from '../Loading/Loading';
 
 const Profile = () => {
  
 
-  const { user  } = use(AuthContext)
-   
+  const { user , loading:authLoading
+   } = use(AuthContext)
+   const [loading, setLoading] = useState(false);
+
+   if(loading){
+    return <Loading></Loading>
+   }
    
   return (
    <div className="flex justify-center items-center min-h-screen bg-gray-100">

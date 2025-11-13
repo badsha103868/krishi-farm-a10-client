@@ -2,12 +2,14 @@ import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../../Provider/AuthProvider/AuthProvider';
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import Loading from '../Loading/Loading';
 
 const MySwal = withReactContent(Swal);
 
 const MyPosts = () => {
-  const { user } = useContext(AuthContext);
+  const { user, loading: authLoading } = useContext(AuthContext);
   const [myCrops, setMyCrops] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // Edit modal state
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -16,12 +18,19 @@ const MyPosts = () => {
   // Fetch user's crops
   useEffect(() => {
     if (user?.email) {
+      setLoading(true)
       fetch(`http://localhost:3000/myCrops?email=${user.email}`)
         .then(res => res.json())
-        .then(data => setMyCrops(data))
-        .catch(err => console.error(err));
+        .then(data =>{
+         setMyCrops(data)
+         setLoading(false)
+        } )
+      .catch(err =>{
+        console.error(err)
+      } )
     }
   }, [user?.email]);
+    
 
   // Open edit modal
   const handleEdit = (crop) => {
@@ -91,7 +100,9 @@ const MyPosts = () => {
       }
     });
   };
-
+  if(loading){
+    return <Loading></Loading>
+  }
   return (
     <div className="mt-8 p-4 border rounded-xl bg-green-50 shadow-sm my-5">
       <h2 className="text-xl text-center font-bold mb-3 text-green-700">
