@@ -1,16 +1,47 @@
-# React + Vite
+# 🌾 Krishi Farm – Smart Agriculture Management Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+###  Live Site URL
 
-Currently, two official plugins are available:
+ **(https://krishi-farm-a10-client.netlify.app/)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## About the Project
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**Krishi Farm** is a modern agriculture-focused web application where users can explore, manage, and trade crops efficiently. The platform is designed to help farmers, buyers, and agricultural experts connect through a seamless digital experience.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+##  Key Features
+
+* **User Authentication** using Firebase (Login, Register, Google Sign-in)
+* **Crop Marketplace** where users can add, update, view, and delete crops
+* **Interactive UI** with Swiper sliders, animations (Framer Motion), and responsive design
+* **Crop Details & Dashboard** including personalized crop lists, interest list, and statistics
+* **Advanced Alerts & Notifications** using SweetAlert2 and React Toastify
+* **Fully Responsive** built with Tailwind CSS and DaisyUI
+
+---
+
+##  Tech Stack
+
+* **Frontend:** React, Vite, Tailwind CSS, DaisyUI
+* **Routing:** React Router v7
+* **Authentication:** Firebase
+* **Animations:** Framer Motion
+* **UI Enhancements:** SweetAlert2, Toastify, Icons, Swiper
+
+---
+
+##  Installation
+
+```bash
+npm install
+npm run dev
+```
+
+##  Author
+
+**Md Badsha Golder**
+
+
