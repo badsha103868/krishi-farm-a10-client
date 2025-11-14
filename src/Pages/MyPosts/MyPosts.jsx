@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { AuthContext } from '../../Provider/AuthProvider/AuthProvider';
+import React, { useEffect, useState, useContext } from "react";
+import { AuthContext } from "../../Provider/AuthProvider/AuthProvider";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import Loading from '../Loading/Loading';
+import Loading from "../Loading/Loading";
 
 const MySwal = withReactContent(Swal);
 
@@ -18,19 +18,20 @@ const MyPosts = () => {
   // Fetch user's crops
   useEffect(() => {
     if (user?.email) {
-      setLoading(true)
-      fetch(`http://localhost:3000/myCrops?email=${user.email}`)
-        .then(res => res.json())
-        .then(data =>{
-         setMyCrops(data)
-         setLoading(false)
-        } )
-      .catch(err =>{
-        console.error(err)
-      } )
+      setLoading(true);
+      fetch(
+        `https://krishi-farm-a10-server.vercel.app/myCrops?email=${user.email}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setMyCrops(data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
   }, [user?.email]);
-    
 
   // Open edit modal
   const handleEdit = (crop) => {
@@ -41,20 +42,23 @@ const MyPosts = () => {
   // Handle update
   const handleUpdate = (e) => {
     e.preventDefault();
-    fetch(`http://localhost:3000/myCrops/${currentCrop._id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(currentCrop)
-    })
-      .then(res => res.json())
-      .then(data => {
+    fetch(
+      `https://krishi-farm-a10-server.vercel.app/myCrops/${currentCrop._id}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(currentCrop),
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
         if (data.success) {
           Swal.fire({
             icon: "success",
             title: "Updated!",
             text: "Crop updated successfully.",
           });
-          const updatedCrops = myCrops.map(c =>
+          const updatedCrops = myCrops.map((c) =>
             c._id === currentCrop._id ? currentCrop : c
           );
           setMyCrops(updatedCrops);
@@ -67,7 +71,7 @@ const MyPosts = () => {
           });
         }
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   };
 
   // Handle delete
@@ -81,27 +85,27 @@ const MyPosts = () => {
       cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/myCrops/${_id}`, {
+        fetch(`https://krishi-farm-a10-server.vercel.app/myCrops/${_id}`, {
           method: "DELETE",
         })
-          .then(res => res.json())
-          .then(data => {
+          .then((res) => res.json())
+          .then((data) => {
             if (data.deletedCount) {
               Swal.fire({
                 title: "Deleted!",
                 text: "Your Post has been deleted.",
-                icon: "success"
+                icon: "success",
               });
-              const remainingCrops = myCrops.filter(crop => crop._id !== _id);
+              const remainingCrops = myCrops.filter((crop) => crop._id !== _id);
               setMyCrops(remainingCrops);
             }
           })
-          .catch(err => console.error(err));
+          .catch((err) => console.error(err));
       }
     });
   };
-  if(loading){
-    return <Loading></Loading>
+  if (loading) {
+    return <Loading></Loading>;
   }
   return (
     <div className="mt-8 p-4 border rounded-xl bg-green-50 shadow-sm my-5">
@@ -129,7 +133,9 @@ const MyPosts = () => {
                   <td>{myCrop.name}</td>
                   <td>{myCrop.type}</td>
                   <td>{myCrop.quantity}</td>
-                  <td>{myCrop.pricePerUnit}/{myCrop.unit}</td>
+                  <td>
+                    {myCrop.pricePerUnit}/{myCrop.unit}
+                  </td>
                   <td>
                     <div className="flex gap-3 mt-2">
                       <button
@@ -165,58 +171,88 @@ const MyPosts = () => {
                 type="text"
                 className="input w-full"
                 value={currentCrop.name}
-                onChange={e => setCurrentCrop({ ...currentCrop, name: e.target.value })}
+                onChange={(e) =>
+                  setCurrentCrop({ ...currentCrop, name: e.target.value })
+                }
                 required
               />
               <input
                 type="text"
                 className="input w-full"
                 value={currentCrop.type}
-                onChange={e => setCurrentCrop({ ...currentCrop, type: e.target.value })}
+                onChange={(e) =>
+                  setCurrentCrop({ ...currentCrop, type: e.target.value })
+                }
                 required
               />
               <input
                 type="number"
                 className="input w-full"
                 value={currentCrop.pricePerUnit}
-                onChange={e => setCurrentCrop({ ...currentCrop, pricePerUnit: e.target.value })}
+                onChange={(e) =>
+                  setCurrentCrop({
+                    ...currentCrop,
+                    pricePerUnit: e.target.value,
+                  })
+                }
                 required
               />
               <input
                 type="text"
                 className="input w-full"
                 value={currentCrop.unit}
-                onChange={e => setCurrentCrop({ ...currentCrop, unit: e.target.value })}
+                onChange={(e) =>
+                  setCurrentCrop({ ...currentCrop, unit: e.target.value })
+                }
                 required
               />
               <input
                 type="number"
                 className="input w-full"
                 value={currentCrop.quantity}
-                onChange={e => setCurrentCrop({ ...currentCrop, quantity: e.target.value })}
+                onChange={(e) =>
+                  setCurrentCrop({ ...currentCrop, quantity: e.target.value })
+                }
                 required
               />
               <input
                 type="text"
                 className="input w-full"
                 value={currentCrop.description}
-                onChange={e => setCurrentCrop({ ...currentCrop, description: e.target.value })}
+                onChange={(e) =>
+                  setCurrentCrop({
+                    ...currentCrop,
+                    description: e.target.value,
+                  })
+                }
               />
               <input
                 type="text"
                 className="input w-full"
                 value={currentCrop.location}
-                onChange={e => setCurrentCrop({ ...currentCrop, location: e.target.value })}
+                onChange={(e) =>
+                  setCurrentCrop({ ...currentCrop, location: e.target.value })
+                }
               />
               <input
                 type="text"
                 className="input w-full"
                 value={currentCrop.image}
-                onChange={e => setCurrentCrop({ ...currentCrop, image: e.target.value })}
+                onChange={(e) =>
+                  setCurrentCrop({ ...currentCrop, image: e.target.value })
+                }
               />
               <div className="modal-action">
-                <button type="submit" className="btn btn-primary">Update</button>
-                <button type="button" className="btn" onClick={() => setEditModalOpen(false)}>Cancel</button>
+                <button type="submit" className="btn btn-primary">
+                  Update
+                </button>
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() => setEditModalOpen(false)}
+                >
+                  Cancel
+                </button>
               </div>
             </form>
           </div>

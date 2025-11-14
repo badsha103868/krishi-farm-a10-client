@@ -5,40 +5,42 @@ import Loading from "../Loading/Loading";
 const MyInterests = () => {
   const { user, loading: authLoading } = useContext(AuthContext);
   const [interests, setInterests] = useState([]);
-  const [sortOrder, setSortOrder] = useState("asc"); 
+  const [sortOrder, setSortOrder] = useState("asc");
   const [loading, setLoading] = useState(false);
-  
+
   useEffect(() => {
     if (user?.email) {
-      setLoading(true)
-      fetch(`http://localhost:3000/myInterests?email=${user.email}`)
+      setLoading(true);
+      fetch(
+        `https://krishi-farm-a10-server.vercel.app/myInterests?email=${user.email}`
+      )
         .then((res) => res.json())
         .then((data) => {
-           setInterests(data) 
-          setLoading(false)
+          setInterests(data);
+          setLoading(false);
         })
-        .catch((err) =>{
-          console.error(err)
-          setLoading(false)
-        } )
+        .catch((err) => {
+          console.error(err);
+          setLoading(false);
+        });
     }
   }, [user?.email]);
 
   // Sorting by crop name
   const handleSort = () => {
     const sorted = [...interests].sort((a, b) => {
-      if (a.cropName.toLowerCase() < b.cropName.toLowerCase()) return sortOrder === "asc" ? -1 : 1;
-      if (a.cropName.toLowerCase() > b.cropName.toLowerCase()) return sortOrder === "asc" ? 1 : -1;
+      if (a.cropName.toLowerCase() < b.cropName.toLowerCase())
+        return sortOrder === "asc" ? -1 : 1;
+      if (a.cropName.toLowerCase() > b.cropName.toLowerCase())
+        return sortOrder === "asc" ? 1 : -1;
       return 0;
     });
     setInterests(sorted);
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
-    if(loading){
-      return <Loading></Loading>
-      
-     
-    }
+  if (loading) {
+    return <Loading></Loading>;
+  }
   return (
     <div className="mt-8 p-4 border rounded-xl bg-green-50 shadow-sm my-5">
       <h2 className="text-xl font-bold text-center mb-4 text-green-700">
@@ -48,10 +50,7 @@ const MyInterests = () => {
       {interests.length > 0 ? (
         <div className="overflow-x-auto">
           <div className="mb-2 flex justify-end">
-            <button
-              className="btn btn-sm btn-outline"
-              onClick={handleSort}
-            >
+            <button className="btn btn-sm btn-outline" onClick={handleSort}>
               Sort by Crop Name ({sortOrder === "asc" ? "A-Z" : "Z-A"})
             </button>
           </div>
@@ -84,7 +83,8 @@ const MyInterests = () => {
                           : "badge-error"
                       }`}
                     >
-                      {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                      {item.status.charAt(0).toUpperCase() +
+                        item.status.slice(1)}
                     </span>
                   </td>
                 </tr>

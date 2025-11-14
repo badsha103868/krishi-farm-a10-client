@@ -12,7 +12,7 @@ const Profile = () => {
    } = use(AuthContext)
    const [loading, setLoading] = useState(false);
 
-   if(loading){
+   if(loading || authLoading){
     return <Loading></Loading>
    }
    

@@ -15,83 +15,88 @@ import Register from "../Pages/Register/Register";
 import PrivateRoute from "../Provider/PrivateRoute/PrivateRoute";
 import UpdateForm from "../Pages/Profile/UpdateForm";
 
-
-
-
 const router = createBrowserRouter([
   {
-   path: "/",
-   Component: Root,
+    path: "/",
+    Component: Root,
 
-   children: [
-    {
-      index: true,
-      Component: Home,
-    },
-    {
-      path: '/allCrops',
-       loader:()=>fetch('http://localhost:3000/crops'),
-      Component: AllCrops,
-      
-    },
-    {
-       path:'/cropDetails/:id',
-       loader: ({params})=>fetch(`http://localhost:3000/crops/${params.id}`),
-      element: <PrivateRoute>
-         <CropDetails></CropDetails>
-      </PrivateRoute>
-    },
-    {
-      path:'/myProfile',
-       element: <PrivateRoute>
-         <Profile></Profile>
-      </PrivateRoute>
-    },
-     {
-        path:'/updateForm',
-        element:<UpdateForm></UpdateForm>
+    children: [
+      {
+        index: true,
+        Component: Home,
       },
-    {
-     path: '/addCrops',
-       element: <PrivateRoute>
-         <AddCrop></AddCrop>
-      </PrivateRoute>
-    },
-    {
-     path: '/myPosts',
-       element: <PrivateRoute>
-         <MyPosts></MyPosts>
-      </PrivateRoute>
-    },
-    {
-     path: '/myInterests',
-       element: <PrivateRoute>
-         <MyInterests></MyInterests>
-      </PrivateRoute>
-    
-    }, 
-
-   ]
+      {
+        path: "/allCrops",
+        loader: () => fetch("https://krishi-farm-a10-server.vercel.app/crops"),
+        Component: AllCrops,
+      },
+      {
+        path: "/cropDetails/:id",
+        loader: ({ params }) =>
+          fetch(`https://krishi-farm-a10-server.vercel.app/crops/${params.id}`),
+        element: (
+          <PrivateRoute>
+            <CropDetails></CropDetails>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/myProfile",
+        element: (
+          <PrivateRoute>
+            <Profile></Profile>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/updateForm",
+        element: <UpdateForm></UpdateForm>,
+      },
+      {
+        path: "/addCrops",
+        element: (
+          <PrivateRoute>
+            <AddCrop></AddCrop>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/myPosts",
+        element: (
+          <PrivateRoute>
+            <MyPosts></MyPosts>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/myInterests",
+        element: (
+          <PrivateRoute>
+            <MyInterests></MyInterests>
+          </PrivateRoute>
+        ),
+      },
+    ],
   },
-   {
-     path:'/auth',
-     Component:AuthLayout,
-     children:[
-     {
-         path:'/auth/login',
-         Component:Login
-     },
-     {
-         path:'/auth/register',
-         Component:Register
-     },
-    ]
-   },
-    
-     {
-      path: "/*",
-        element: <ErrorPage></ErrorPage>
+  {
+    path: "/auth",
+    Component: AuthLayout,
+    children: [
+      {
+        path: "/auth/login",
+        Component: Login,
       },
+      {
+        path: "/auth/register",
+        Component: Register,
+      },
+    ],
+  },
+
+  {
+    path: "/*",
+    element: <ErrorPage></ErrorPage>,
+  },
 ]);
 
-export default router
+export default router;

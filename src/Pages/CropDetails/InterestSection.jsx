@@ -37,12 +37,20 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
   // open modal
   const handleInterestModalOpen = () => {
     if (!quantity || quantity <= 0) {
-      MySwal.fire({ icon: "warning", title: "Invalid Quantity", text: "Please enter a valid quantity greater than 0." });
+      MySwal.fire({
+        icon: "warning",
+        title: "Invalid Quantity",
+        text: "Please enter a valid quantity greater than 0.",
+      });
       return;
     }
 
     if (!message.trim()) {
-      MySwal.fire({ icon: "warning", title: "Message Required", text: "Please write a short message before submitting." });
+      MySwal.fire({
+        icon: "warning",
+        title: "Message Required",
+        text: "Please write a short message before submitting.",
+      });
       return;
     }
 
@@ -52,17 +60,29 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
   // confirm submit
   const handleConfirmSubmit = (e) => {
     e.preventDefault();
-    const newInterest = { userEmail: user.email, userName: user.displayName, quantity, message };
+    const newInterest = {
+      userEmail: user.email,
+      userName: user.displayName,
+      quantity,
+      message,
+    };
 
-    fetch(`http://localhost:3000/crops/${initialCrop._id}/interests`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(newInterest),
-    })
+    fetch(
+      `https://krishi-farm-a10-server.vercel.app/crops/${initialCrop._id}/interests`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(newInterest),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          MySwal.fire({ icon: "success", title: "Interest Sent!", text: "Your interest has been successfully submitted." });
+          MySwal.fire({
+            icon: "success",
+            title: "Interest Sent!",
+            text: "Your interest has been successfully submitted.",
+          });
           setQuantity("");
           setMessage("");
           setTotalPrice(0);
@@ -77,31 +97,56 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
 
           interestModalRef.current.close();
         } else {
-          MySwal.fire({ icon: "error", title: "Oops!", text: data.message || "Failed to send interest." });
+          MySwal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: data.message || "Failed to send interest.",
+          });
         }
       })
       .catch(() => {
-        MySwal.fire({ icon: "error", title: "Server Error", text: "Something went wrong. Try again later." });
+        MySwal.fire({
+          icon: "error",
+          title: "Server Error",
+          text: "Something went wrong. Try again later.",
+        });
       });
   };
 
   // Accept / Reject function
   const handleStatusUpdate = (interestId, newStatus, quantityRequested) => {
-    fetch(`http://localhost:3000/interests/${interestId}`, {
+    fetch(`https://krishi-farm-a10-server.vercel.app/interests/${interestId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cropsId: initialCrop._id, status: newStatus, quantity: quantityRequested }),
+      body: JSON.stringify({
+        cropsId: initialCrop._id,
+        status: newStatus,
+        quantity: quantityRequested,
+      }),
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          MySwal.fire({ icon: "success", title: `Interest ${newStatus}!`, text: `You have ${newStatus} this interest.` });
+          MySwal.fire({
+            icon: "success",
+            title: `Interest ${newStatus}!`,
+            text: `You have ${newStatus} this interest.`,
+          });
 
           // update interests & quantity
-          const updatedInterests = initialCrop.interests.map((i) => i._id === interestId ? { ...i, status: newStatus } : i);
-          const updatedQuantity = newStatus === "accepted" ? initialCrop.quantity - quantityRequested : initialCrop.quantity;
+          const updatedInterests = initialCrop.interests.map((i) =>
+            i._id === interestId ? { ...i, status: newStatus } : i
+          );
+          const updatedQuantity =
+            newStatus === "accepted"
+              ? initialCrop.quantity - quantityRequested
+              : initialCrop.quantity;
 
-          setCrop({ ...initialCrop, interests: updatedInterests, quantity: updatedQuantity });
+          setCrop({
+            ...initialCrop,
+            interests: updatedInterests,
+            quantity: updatedQuantity,
+          });
         }
       });
   };
@@ -110,13 +155,20 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
   if (isOwner) {
     return (
       <div className="mt-8 p-4 border rounded-xl bg-green-50 shadow-sm">
-        <h2 className="text-xl text-center font-bold mb-3 text-green-700">Received Interest Requests</h2>
+        <h2 className="text-xl text-center font-bold mb-3 text-green-700">
+          Received Interest Requests
+        </h2>
         {initialCrop.interests?.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="table">
               <thead>
                 <tr>
-                  <th>SL No.</th><th>Buyer Name</th><th>Quantity</th><th>Message</th><th>Status</th><th>Actions</th>
+                  <th>SL No.</th>
+                  <th>Buyer Name</th>
+                  <th>Quantity</th>
+                  <th>Message</th>
+                  <th>Status</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -126,11 +178,37 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
                     <td>{interest.userName}</td>
                     <td>{interest.quantity}</td>
                     <td>{interest.message}</td>
-                    <td className="capitalize font-semibold text-primary">{interest.status}</td>
+                    <td className="capitalize font-semibold text-primary">
+                      {interest.status}
+                    </td>
                     <td>
                       <div className="flex gap-3 mt-2">
-                        <button onClick={() => handleStatusUpdate(interest._id, "accepted", interest.quantity)} disabled={interest.status !== "pending"} className="btn btn-success btn-sm">Accept</button>
-                        <button onClick={() => handleStatusUpdate(interest._id, "rejected", interest.quantity)} disabled={interest.status !== "pending"} className="btn btn-error btn-sm">Reject</button>
+                        <button
+                          onClick={() =>
+                            handleStatusUpdate(
+                              interest._id,
+                              "accepted",
+                              interest.quantity
+                            )
+                          }
+                          disabled={interest.status !== "pending"}
+                          className="btn btn-success btn-sm"
+                        >
+                          Accept
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleStatusUpdate(
+                              interest._id,
+                              "rejected",
+                              interest.quantity
+                            )
+                          }
+                          disabled={interest.status !== "pending"}
+                          className="btn btn-error btn-sm"
+                        >
+                          Reject
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -138,7 +216,11 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
               </tbody>
             </table>
           </div>
-        ) : <p className="text-secondary text-xl text-center">No interests yet.</p>}
+        ) : (
+          <p className="text-secondary text-xl text-center">
+            No interests yet.
+          </p>
+        )}
       </div>
     );
   }
@@ -146,7 +228,9 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
   // BUYER VIEW
   return (
     <div className="mt-8 p-6 rounded-xl bg-white shadow-md">
-      <h2 className="text-xl text-center font-bold mb-4 text-green-600">Send Your Interest</h2>
+      <h2 className="text-xl text-center font-bold mb-4 text-green-600">
+        Send Your Interest
+      </h2>
       {hasSentInterest ? (
         <div className="text-center text-gray-600 font-medium bg-green-50 p-5 rounded-lg">
           You’ve already sent an interest for this crop.
@@ -155,29 +239,71 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
         <form className="space-y-3">
           <div>
             <label className="block mb-1 font-semibold">Quantity (kg)</label>
-            <input type="number" value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value))} min="1" required className="input input-bordered w-full" placeholder="Enter desired quantity" />
+            <input
+              type="number"
+              value={quantity}
+              onChange={(e) => setQuantity(parseInt(e.target.value))}
+              min="1"
+              required
+              className="input input-bordered w-full"
+              placeholder="Enter desired quantity"
+            />
           </div>
           <div>
             <label className="block mb-1 font-semibold">Total Price (৳)</label>
-            <input type="number" value={totalPrice} readOnly className="input input-bordered w-full" />
-            <p className="text-sm text-gray-500 mt-1">Unit Price: ৳{initialCrop.pricePerUnit} per {initialCrop.unit}</p>
+            <input
+              type="number"
+              value={totalPrice}
+              readOnly
+              className="input input-bordered w-full"
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              Unit Price: ৳{initialCrop.pricePerUnit} per {initialCrop.unit}
+            </p>
           </div>
           <div>
             <label className="block mb-1 font-semibold">Message</label>
-            <textarea value={message} onChange={(e) => setMessage(e.target.value)} required className="textarea textarea-bordered w-full" placeholder="Write your message..."></textarea>
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              required
+              className="textarea textarea-bordered w-full"
+              placeholder="Write your message..."
+            ></textarea>
           </div>
-          <button onClick={handleInterestModalOpen} type="button" className="btn bg-primary hover:bg-green-500 text-white w-full">Submit Interest</button>
+          <button
+            onClick={handleInterestModalOpen}
+            type="button"
+            className="btn bg-primary hover:bg-green-500 text-white w-full"
+          >
+            Submit Interest
+          </button>
         </form>
       )}
 
       <dialog ref={interestModalRef} className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg mb-2">Confirm Your Interest</h3>
-          <p className="text-gray-600">Are you sure you want to send interest for <strong>{quantity} kg {initialCrop.name}</strong>?</p>
-          <p className="mt-2">Total Price: <strong>৳{totalPrice}</strong></p>
+          <p className="text-gray-600">
+            Are you sure you want to send interest for{" "}
+            <strong>
+              {quantity} kg {initialCrop.name}
+            </strong>
+            ?
+          </p>
+          <p className="mt-2">
+            Total Price: <strong>৳{totalPrice}</strong>
+          </p>
           <div className="modal-action">
-            <button onClick={handleConfirmSubmit} className="btn btn-success">Confirm</button>
-            <button onClick={() => interestModalRef.current.close()} className="btn">Cancel</button>
+            <button onClick={handleConfirmSubmit} className="btn btn-success">
+              Confirm
+            </button>
+            <button
+              onClick={() => interestModalRef.current.close()}
+              className="btn"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       </dialog>
