@@ -2,15 +2,15 @@ import React from "react";
 
 const CropInformation = ({ crop }) => {
   return (
-    <div className="flex flex-col md:flex-row gap-6 shadow-lg rounded-lg overflow-hidden bg-white p-6">
-      <div className="md:w-1/2">
+    <div className="flex flex-col md:flex-row gap-6 shadow-lg rounded-lg overflow-hidden bg-white p-2 md:p-6">
+      <div className="md:w-2/3">
         <img
           src={crop.image}
           alt={crop.name}
-          className="w-full h-[500px] object-cover rounded-xl"
+          className="w-full h-[300px] md:h-[500px] object-cover rounded-xl"
         />
       </div>
-      <div className="md:w-1/2 flex flex-col justify-center space-y-4">
+      <div className="md:w-1/3 flex flex-col justify-center ml-5 space-y-4">
         <h1 className="text-3xl font-bold text-primary">{crop.name}</h1>
         <p className="text-neutral text-lg">{crop.description}</p>
 
