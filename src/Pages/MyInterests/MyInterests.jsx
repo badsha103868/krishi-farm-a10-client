@@ -41,7 +41,7 @@ const MyInterests = () => {
     setInterests(sorted);
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
-  if (loading) {
+  if (loading || authLoading) {
     return <Loading></Loading>;
   }
   return (

@@ -31,7 +31,7 @@ const steps = [
 const WorkSection = () => {
   return (
     <section className=" py-16 ">
-      <h2 className="text-3xl md:text-4xl font-extrabold text-center text-secondary mb-12">
+      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-secondary mb-12">
         How <span className="text-primary">Krishi Farm</span> Works
       </h2>
 

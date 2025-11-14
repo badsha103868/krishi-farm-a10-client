@@ -7,7 +7,7 @@ const CropInformation = ({ crop }) => {
         <img
           src={crop.image}
           alt={crop.name}
-          className="w-full h-[500px] object-cover"
+          className="w-full h-[500px] object-cover rounded-xl"
         />
       </div>
       <div className="md:w-1/2 flex flex-col justify-center space-y-4">

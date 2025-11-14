@@ -19,7 +19,7 @@ const LatestCrops = ({ latestCropsPromise }) => {
       </div>
        
        <div className='flex justify-center'>
-        <Link to='/allCrops' className='btn bg-green-500 text-xl text-white px-10 mt-5'>View All</Link>
+        <Link to='/allCrops' className='btn btn-primary text-xl text-white px-10 mt-5'>View All</Link>
        </div>
     </div>
   );
