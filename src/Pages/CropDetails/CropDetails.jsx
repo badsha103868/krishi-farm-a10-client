@@ -5,7 +5,8 @@ import InterestSection from "./InterestSection";
 
 const CropDetails = () => {
   const loadedCrop = useLoaderData();
-  const [crop, setCrop] = useState(loadedCrop); // ✅ crop state manage here
+  //crop state manage
+  const [crop, setCrop] = useState(loadedCrop); 
 
   return (
     <div className="my-4">

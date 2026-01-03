@@ -6,7 +6,6 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/pagination";
 
-
 import img1 from "../../assets/green field sunrise.avif";
 import img2 from "../../assets/fresh vegetables market.webp";
 import img3 from "../../assets/sustainable farming.webp";
@@ -45,7 +44,7 @@ const HeroSlider = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section className="relative w-full h-[500px] md:h-screen overflow-hidden">
+    <section className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden">
       <Swiper
         modules={[Autoplay, Pagination, EffectFade]}
         effect="fade"
@@ -100,7 +99,19 @@ const HeroSlider = () => {
         ))}
       </Swiper>
 
-      
+      {/* Scroll Arrow */}
+      <div className="absolute bottom-5 w-full flex justify-center">
+        <span
+          className="animate-bounce text-white text-3xl cursor-pointer"
+          onClick={() =>
+            document
+              .getElementById("nextSection")
+              ?.scrollIntoView({ behavior: "smooth" })
+          }
+        >
+          ⌄
+        </span>
+      </div>
     </section>
   );
 };

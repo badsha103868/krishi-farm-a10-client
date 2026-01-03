@@ -74,7 +74,7 @@ const AllCrops = () => {
           
          
          ( <Suspense fallback={<span>Loading....</span>}>
-       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center gap-6  '>
+       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-center gap-6  '>
            
            {
             filteredData.length > 0 ? (

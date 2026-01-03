@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { AuthContext } from "../../Provider/AuthProvider/AuthProvider";
@@ -6,7 +6,7 @@ import { AuthContext } from "../../Provider/AuthProvider/AuthProvider";
 const MySwal = withReactContent(Swal);
 
 const InterestSection = ({ crop: initialCrop, setCrop }) => {
-  const { user } = React.useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [quantity, setQuantity] = useState("");
   const [message, setMessage] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
@@ -151,13 +151,13 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
   // OWNER VIEW
   if (isOwner) {
     return (
-      <div className="mt-8 p-4 border rounded-xl bg-green-50 shadow-sm">
-        <h2 className="text-xl text-center font-bold mb-3 text-green-700">
+      <div className="mt-8 p-4 border rounded-xl bg-base-100 shadow-md">
+        <h2 className="text-xl text-center font-bold mb-3 text-primary">
           Received Interest Requests
         </h2>
         {initialCrop.interests?.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="table">
+            <table className="table w-full">
               <thead>
                 <tr>
                   <th>SL No.</th>
@@ -172,9 +172,9 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
                 {initialCrop.interests.map((interest, idx) => (
                   <tr key={interest._id}>
                     <th>{idx + 1}</th>
-                    <td>{interest.userName}</td>
-                    <td>{interest.quantity}</td>
-                    <td>{interest.message}</td>
+                    <td className="text-base-content">{interest.userName}</td>
+                    <td className="text-base-content">{interest.quantity}</td>
+                    <td className="text-base-content">{interest.message}</td>
                     <td className="capitalize font-semibold text-primary">
                       {interest.status}
                     </td>
@@ -214,7 +214,7 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
             </table>
           </div>
         ) : (
-          <p className="text-secondary text-xl text-center">
+          <p className="text-base-content text-xl text-center">
             No interests yet.
           </p>
         )}
@@ -224,54 +224,60 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
 
   // BUYER VIEW
   return (
-    <div className="mt-8 p-6 rounded-xl bg-white shadow-md">
-      <h2 className="text-xl text-center font-bold mb-4 text-green-600">
+    <div className="mt-8 p-6 rounded-xl bg-base-100 shadow-md">
+      <h2 className="text-xl text-center font-bold mb-4 text-primary">
         Send Your Interest
       </h2>
       {hasSentInterest ? (
-        <div className="text-center text-gray-600 font-medium bg-green-50 p-5 rounded-lg">
+        <div className="text-center text-base-content font-medium bg-base-200 p-5 rounded-lg">
           You’ve already sent an interest for this crop.
         </div>
       ) : (
         <form className="space-y-3">
           <div>
-            <label className="block mb-1 font-semibold">Quantity (kg)</label>
+            <label className="block mb-1 font-semibold text-base-content">
+              Quantity ({initialCrop.unit})
+            </label>
             <input
               type="number"
               value={quantity}
               onChange={(e) => setQuantity(parseInt(e.target.value))}
               min="1"
               required
-              className="input input-bordered w-full"
+              className="input input-bordered w-full bg-base-200 text-base-content"
               placeholder="Enter desired quantity"
             />
           </div>
           <div>
-            <label className="block mb-1 font-semibold">Total Price (৳)</label>
+            <label className="block mb-1 font-semibold text-base-content">
+              Total Price (৳)
+            </label>
             <input
               type="number"
               value={totalPrice}
               readOnly
-              className="input input-bordered w-full"
+              className="input input-bordered w-full bg-base-200 text-base-content"
             />
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-base-content mt-1">
               Unit Price: ৳{initialCrop.pricePerUnit} per {initialCrop.unit}
             </p>
           </div>
           <div>
-            <label className="block mb-1 font-semibold">Message</label>
+            <label className="block mb-1 font-semibold text-base-content">
+              Message
+            </label>
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               required
-              className="textarea textarea-bordered w-full"
+              className="textarea textarea-bordered w-full bg-base-200 text-base-content"
               placeholder="Write your message..."
             ></textarea>
           </div>
           <button
             onClick={handleInterestModalOpen}
             type="button"
-            className="btn bg-primary hover:bg-green-500 text-white w-full"
+            className="btn btn-primary w-full"
           >
             Submit Interest
           </button>
@@ -279,12 +285,12 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
       )}
 
       <dialog ref={interestModalRef} className="modal">
-        <div className="modal-box">
+        <div className="modal-box bg-base-100 text-base-content">
           <h3 className="font-bold text-lg mb-2">Confirm Your Interest</h3>
-          <p className="text-gray-600">
+          <p>
             Are you sure you want to send interest for{" "}
             <strong>
-              {quantity} kg {initialCrop.name}
+              {quantity} {initialCrop.name}
             </strong>
             ?
           </p>
