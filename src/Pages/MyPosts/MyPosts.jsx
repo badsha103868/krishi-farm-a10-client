@@ -19,9 +19,7 @@ const MyPosts = () => {
   useEffect(() => {
     if (user?.email) {
       setLoading(true);
-      fetch(
-        `https://krishi-farm-a10-server.vercel.app/myCrops?email=${user.email}`
-      )
+      fetch(`http://localhost:3000/myCrops?email=${user.email}`)
         .then((res) => res.json())
         .then((data) => {
           setMyCrops(data);
@@ -42,14 +40,11 @@ const MyPosts = () => {
   // Handle update
   const handleUpdate = (e) => {
     e.preventDefault();
-    fetch(
-      `https://krishi-farm-a10-server.vercel.app/myCrops/${currentCrop._id}`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(currentCrop),
-      }
-    )
+    fetch(`http://localhost:3000/myCrops/${currentCrop._id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(currentCrop),
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
@@ -85,7 +80,7 @@ const MyPosts = () => {
       cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`https://krishi-farm-a10-server.vercel.app/myCrops/${_id}`, {
+        fetch(`http://localhost:3000/myCrops/${_id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())
@@ -108,14 +103,14 @@ const MyPosts = () => {
     return <Loading></Loading>;
   }
   return (
-    <div className="mt-8 p-4 border rounded-xl bg-green-50 shadow-sm my-5">
-      <h2 className="text-xl text-center font-bold mb-3 text-green-700">
-        My Crop Post
+     <div className="mt-8 p-4 rounded-xl bg-base-200 shadow-sm my-5">
+      <h2 className="text-xl text-center font-bold mb-3 text-primary">
+        My Crop Posts
       </h2>
 
       {myCrops.length > 0 ? (
         <div className="overflow-x-auto">
-          <table className="table">
+          <table className="table table-zebra w-full">
             <thead>
               <tr>
                 <th>SL No.</th>
@@ -137,10 +132,10 @@ const MyPosts = () => {
                     {myCrop.pricePerUnit}/{myCrop.unit}
                   </td>
                   <td>
-                    <div className="flex gap-3 mt-2">
+                    <div className="flex gap-2 mt-2">
                       <button
                         onClick={() => handleEdit(myCrop)}
-                        className="btn btn-success btn-sm"
+                        className="btn btn-primary btn-sm"
                       >
                         Edit
                       </button>
@@ -158,14 +153,18 @@ const MyPosts = () => {
           </table>
         </div>
       ) : (
-        <p className="text-secondary text-xl text-center">No crops found.</p>
+        <p className="text-base-content/70 text-center text-lg mt-4">
+          No crops found.
+        </p>
       )}
 
       {/* Edit Modal */}
       {editModalOpen && currentCrop && (
         <dialog open className="modal">
           <div className="modal-box">
-            <h3 className="font-bold text-lg mb-2">Edit Crop</h3>
+            <h3 className="font-bold text-lg mb-2 text-base-content">
+              Edit Crop
+            </h3>
             <form onSubmit={handleUpdate} className="space-y-3">
               <input
                 type="text"
@@ -220,10 +219,7 @@ const MyPosts = () => {
                 className="input w-full"
                 value={currentCrop.description}
                 onChange={(e) =>
-                  setCurrentCrop({
-                    ...currentCrop,
-                    description: e.target.value,
-                  })
+                  setCurrentCrop({ ...currentCrop, description: e.target.value })
                 }
               />
               <input

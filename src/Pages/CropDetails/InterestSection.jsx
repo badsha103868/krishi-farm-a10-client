@@ -67,14 +67,11 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
       message,
     };
 
-    fetch(
-      `https://krishi-farm-a10-server.vercel.app/crops/${initialCrop._id}/interests`,
-      {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(newInterest),
-      }
-    )
+    fetch(`http://localhost:3000/crops/${initialCrop._id}/interests`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(newInterest),
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
@@ -115,7 +112,7 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
 
   // Accept / Reject function
   const handleStatusUpdate = (interestId, newStatus, quantityRequested) => {
-    fetch(`https://krishi-farm-a10-server.vercel.app/interests/${interestId}`, {
+    fetch(`http://localhost:3000/interests/${interestId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

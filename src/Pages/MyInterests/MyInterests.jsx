@@ -2,21 +2,16 @@ import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider/AuthProvider";
 import Loading from "../Loading/Loading";
 
-
 const MyInterests = () => {
   const { user, loading: authLoading } = useContext(AuthContext);
   const [interests, setInterests] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
   const [loading, setLoading] = useState(false);
 
-  
-
   useEffect(() => {
     if (user?.email) {
       setLoading(true);
-      fetch(
-        `https://krishi-farm-a10-server.vercel.app/myInterests?email=${user.email}`
-      )
+      fetch(`http://localhost:3000/myInterests?email=${user.email}`)
         .then((res) => res.json())
         .then((data) => {
           setInterests(data);
@@ -45,8 +40,8 @@ const MyInterests = () => {
     return <Loading></Loading>;
   }
   return (
-    <div className="mt-8 p-4 border rounded-xl bg-green-50 shadow-sm my-5">
-      <h2 className="text-xl font-bold text-center mb-4 text-green-700">
+ <div className="mt-8 p-4 rounded-xl bg-base-200 shadow-sm my-5">
+      <h2 className="text-xl font-bold text-center mb-4 text-primary">
         My Interests
       </h2>
 
@@ -57,7 +52,7 @@ const MyInterests = () => {
               Sort by Crop Name ({sortOrder === "asc" ? "A-Z" : "Z-A"})
             </button>
           </div>
-          <table className="table w-full">
+          <table className="table table-zebra w-full">
             <thead>
               <tr>
                 <th>SL No.</th>
@@ -72,7 +67,7 @@ const MyInterests = () => {
               {interests.map((item, index) => (
                 <tr key={item.cropId}>
                   <th>{index + 1}</th>
-                  <td >{item.cropName}</td>
+                  <td>{item.cropName}</td>
                   <td>{item.ownerName}</td>
                   <td>{item.quantity}</td>
                   <td>{item.message}</td>
@@ -96,7 +91,7 @@ const MyInterests = () => {
           </table>
         </div>
       ) : (
-        <p className="text-center text-secondary text-xl">
+        <p className="text-center text-base-content/70 text-xl">
           No interests sent yet.
         </p>
       )}

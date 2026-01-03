@@ -78,7 +78,7 @@ const Login = () => {
         };
 
         //  create user in database
-        fetch("https://krishi-farm-a10-server.vercel.app/users", {
+        fetch("http://localhost:3000/users", {
           method: "POST",
           headers: {
             "content-type": "application/json",

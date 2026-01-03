@@ -27,13 +27,13 @@ const router = createBrowserRouter([
       },
       {
         path: "/allCrops",
-        loader: () => fetch("https://krishi-farm-a10-server.vercel.app/crops"),
+        loader: () => fetch("http://localhost:3000/crops"),
         Component: AllCrops,
       },
       {
         path: "/cropDetails/:id",
         loader: ({ params }) =>
-          fetch(`https://krishi-farm-a10-server.vercel.app/crops/${params.id}`),
+          fetch(`http://localhost:3000/crops/${params.id}`),
         element: (
           <PrivateRoute>
             <CropDetails></CropDetails>

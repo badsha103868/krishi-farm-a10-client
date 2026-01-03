@@ -52,7 +52,7 @@ const AddCrop = () => {
       createdAt: new Date(),
     };
     setLoading(true);
-    fetch("https://krishi-farm-a10-server.vercel.app/crops", {
+    fetch("http://localhost:3000/crops", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newCrop),
@@ -165,22 +165,12 @@ const AddCrop = () => {
               required
             />
 
-            {/*login  button */}
-            <button
-              type="submit"
-              className="btn btn-primary bg-green-600 hover:bg-green-700 text-white mt-4"
-            >
+            {/*Add  button */}
+           <button type="submit" className="btn btn-primary mt-4">
               Add Crop
             </button>
 
-            {/* error and success showing  */}
-
-            {/* {
-        success && <p className="text-green-500">Account Created Successfully</p>
-        }
-        {
-          error && <p className='text-secondary text-xs'>{error}</p>
-        } */}
+        
           </fieldset>
         </form>
       </div>

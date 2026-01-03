@@ -12,13 +12,17 @@ const AuthLayout = () => {
 
 
   return (
-    <div className='w-11/12 mx-auto '>
+     <> 
       <Navbar></Navbar>
       {/* loading spinner */}
        {
          isNavigating&& (<Loading></Loading>)
        }
+    <div className='w-11/12 mx-auto '>
       <Outlet></Outlet>
+       </div>
+
+
       <Footer></Footer>
 
       
@@ -34,7 +38,7 @@ const AuthLayout = () => {
         draggable
         pauseOnHover
       />
-    </div>
+   </>
   );
 };
 

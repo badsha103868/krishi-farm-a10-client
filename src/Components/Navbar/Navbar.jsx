@@ -1,17 +1,26 @@
-import React, { useContext, useState } from 'react';
-import { Link, NavLink } from 'react-router';  // ✅ FIXED
-import logoImg from '../../assets/logoFarm2.jpeg';
-import userImg from '../../assets/icons8-avatar-48.png';
-import { AuthContext } from '../../Provider/AuthProvider/AuthProvider';
-import { toast } from 'react-toastify';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+import React, { useContext, useEffect, useState } from "react";
+import { Link, NavLink } from "react-router"; // ✅ FIXED
+import logoImg from "../../assets/logoFarm2.jpeg";
+import userImg from "../../assets/icons8-avatar-48.png";
+import { AuthContext } from "../../Provider/AuthProvider/AuthProvider";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+import { Moon, Sun } from "lucide-react";
 
 const MySwal = withReactContent(Swal);
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
+
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   const handleLogOut = () => {
     logOut()
@@ -27,26 +36,50 @@ const Navbar = () => {
   };
 
   const handleLinkClick = () => {
-    setIsOpen(false); 
+    setIsOpen(false);
   };
 
   const links = (
     <>
-      <li><NavLink to="/" onClick={handleLinkClick}>Home</NavLink></li>
-      <li><NavLink to="/allCrops" onClick={handleLinkClick}>All Crops</NavLink></li>
+      <li>
+        <NavLink to="/" onClick={handleLinkClick}>
+          Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/allCrops" onClick={handleLinkClick}>
+          All Crops
+        </NavLink>
+      </li>
       {user && (
         <>
-          <li><NavLink to="/myProfile" onClick={handleLinkClick}>Profile</NavLink></li>
-          <li><NavLink to="/addCrops" onClick={handleLinkClick}>Add Crops</NavLink></li>
-          <li><NavLink to="/myPosts" onClick={handleLinkClick}>My Posts</NavLink></li>
-          <li><NavLink to="/myInterests" onClick={handleLinkClick}>My Interests</NavLink></li>
+          <li>
+            <NavLink to="/myProfile" onClick={handleLinkClick}>
+              Profile
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/addCrops" onClick={handleLinkClick}>
+              Add Crops
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/myPosts" onClick={handleLinkClick}>
+              My Posts
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/myInterests" onClick={handleLinkClick}>
+              My Interests
+            </NavLink>
+          </li>
         </>
       )}
     </>
   );
 
   return (
-    <div className="navbar bg-base-100 shadow-sm">
+    <div className="navbar bg-base-100 shadow-sm sticky top-0 z-50">
       <div className="navbar-start">
         {/* dropdown for small device */}
         <div className="dropdown relative">
@@ -100,23 +133,30 @@ const Navbar = () => {
       {/* navbar end */}
       <div className="navbar-end">
         {user ? (
-          <div className="flex items-center gap-1">
-            <img
-              className="w-12 h-12 rounded-full bg-white"
-              src={user.photoURL || userImg}
-              alt="avatar"
-            />
-            <button
-              onClick={handleLogOut}
-              className="btn btn-primary bg-[#2E7D32] px-2 md:px-5"
+          <div className="dropdown dropdown-end">
+            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+              <img
+                className="w-10 rounded-full"
+                src={user.photoURL || userImg}
+              />
+            </label>
+
+            <ul
+              tabIndex={0}
+              className="menu dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
-              Logout
-            </button>
+              <li>
+                <NavLink to="/myProfile">Profile</NavLink>
+              </li>
+              <li>
+                <button onClick={handleLogOut}>Logout</button>
+              </li>
+            </ul>
           </div>
         ) : (
           <div className="flex space-x-2">
             <Link to="/auth/login/" onClick={handleLinkClick}>
-              <button className="btn btn-primary bg-[#2E7D32] px-2 md:px-5">
+              <button className="btn btn-primary px-2 md:px-5">
                 Login
               </button>
             </Link>
@@ -127,6 +167,13 @@ const Navbar = () => {
             </Link>
           </div>
         )}
+        <button
+          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+          className="btn btn-ghost btn-circle ml-2"
+          title="Toggle theme"
+        >
+          {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+        </button>
       </div>
     </div>
   );

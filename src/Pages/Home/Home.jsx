@@ -7,9 +7,9 @@ import WorkSection from "./WorkSection";
 import Blogs from "./Blogs";
 import TestimonialsSection from "./TestimonialsSection";
 
-const latestCropsPromise = fetch(
-  "https://krishi-farm-a10-server.vercel.app/latestCrops"
-).then((res) => res.json());
+const latestCropsPromise = fetch("http://localhost:3000/latestCrops").then(
+  (res) => res.json()
+);
 
 const Home = () => {
   return (
