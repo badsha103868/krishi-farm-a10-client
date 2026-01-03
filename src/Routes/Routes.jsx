@@ -35,9 +35,8 @@ const router = createBrowserRouter([
         loader: ({ params }) =>
           fetch(`http://localhost:3000/crops/${params.id}`),
         element: (
-          <PrivateRoute>
             <CropDetails></CropDetails>
-          </PrivateRoute>
+       
         ),
       },
       {

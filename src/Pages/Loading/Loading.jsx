@@ -3,7 +3,7 @@ import logoImg from '../../assets/logoFarm2.jpeg'
 
 const Loading = () => {
   return (
-   <div className="fixed inset-0 flex justify-center items-center bg-white bg-opacity-50 z-50 ">
+   <div className="fixed inset-0 flex justify-center items-center bg-base-100 bg-opacity-50 z-50 ">
                 <span className='text-4xl font-bold'>L</span>
                 <img src={logoImg} alt="Loading..."  className="w-10 h-10 animate-spin m-2" /> 
                 <span className='text-4xl font-bold'>A D I N G</span>

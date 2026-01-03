@@ -12,6 +12,8 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [hasSentInterest, setHasSentInterest] = useState(false);
   const interestModalRef = useRef(null);
+  const authModalRef = useRef(null);
+
 
   const isOwner = user?.email === initialCrop?.owner?.ownerEmail;
 
@@ -36,6 +38,11 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
 
   // open modal
   const handleInterestModalOpen = () => {
+    // USER NOT LOGGED IN
+    if (!user) {
+      authModalRef.current.showModal();
+      return;
+    }
     if (!quantity || quantity <= 0) {
       MySwal.fire({
         icon: "warning",
@@ -283,6 +290,33 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
           </button>
         </form>
       )}
+      {/* LOGIN / REGISTER MODAL */}
+     <dialog ref={authModalRef} className="modal">
+        <div className="modal-box bg-base-100 text-base-content text-center">
+          <h3 className="font-bold text-xl mb-3">Login Required</h3>
+          <p className="mb-6 text-base-content/80">
+            To send interest for this crop, please login or create an account.
+          </p>
+
+          <div className="flex justify-center gap-4">
+            <a href="/auth/login" className="btn btn-primary">
+              Login
+            </a>
+            <a href="/auth/register" className="btn btn-outline btn-primary">
+              Register
+            </a>
+          </div>
+
+          <div className="modal-action">
+            <button
+              onClick={() => authModalRef.current.close()}
+              className="btn btn-ghost"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </dialog>
 
       <dialog ref={interestModalRef} className="modal">
         <div className="modal-box bg-base-100 text-base-content">

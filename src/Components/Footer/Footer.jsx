@@ -67,7 +67,7 @@ const Footer = () => {
                
                 <div>
                   <div className="font-medium">Address</div>
-                  <div className="text-sm opacity-90">Village — XYZ, District — ABC, Bangladesh</div>
+                  <div className="text-sm opacity-90">Khulna,Khulna Division, Bangladesh</div>
                 </div>
               </li>
 

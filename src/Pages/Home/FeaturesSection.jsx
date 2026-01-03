@@ -8,20 +8,15 @@ const features = [
     desc: "Fresh and 100% organic fruits, vegetables, and seeds directly from local farms.",
     icon: <Leaf className="w-8 h-8 text-green-600" />,
   },
+ 
   {
     id: 2,
-    title: "Sustainable Farming",
-    desc: "We support eco-friendly practices that protect the environment and community.",
-    icon: <Sun className="w-8 h-8 text-yellow-500" />,
-  },
-  {
-    id: 3,
     title: "Fast Delivery",
     desc: "Receive your orders quickly and safely, right to your doorstep.",
     icon: <Zap className="w-8 h-8 text-blue-500" />,
   },
   {
-    id: 4,
+    id: 3,
     title: "Trusted by Customers",
     desc: "Our customers love our fresh products and reliable services.",
     icon: <Heart className="w-8 h-8 text-red-500" />,

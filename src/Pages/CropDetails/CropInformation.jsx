@@ -24,6 +24,9 @@ const CropInformation = ({ crop }) => {
           <p>
             Location: <span className="text-secondary">{crop.location}</span>
           </p>
+          <p >
+              Added on: {new Date(crop.createdAt).toLocaleDateString()}
+            </p>
         </div>
       </div>
     </div>
