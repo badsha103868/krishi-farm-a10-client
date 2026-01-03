@@ -25,19 +25,29 @@ const router = createBrowserRouter([
         index: true,
         Component: Home,
       },
-      {
-        path: "/allCrops",
-        loader: () => fetch("http://localhost:3000/crops"),
-        Component: AllCrops,
-      },
+ {
+  path: "/allCrops",
+  loader: ({ request }) => {
+    const url = new URL(request.url);
+
+    const search = url.searchParams.get("search") || "";
+    const sort = url.searchParams.get("sort") || "";
+    const page = url.searchParams.get("page") || 1;
+
+    return fetch(
+      `http://localhost:3000/crops?search=${search}&sort=${sort}&page=${page}&limit=8`
+    );
+  },
+  Component: AllCrops,
+},
+
+
+
       {
         path: "/cropDetails/:id",
         loader: ({ params }) =>
           fetch(`http://localhost:3000/crops/${params.id}`),
-        element: (
-            <CropDetails></CropDetails>
-       
-        ),
+        element: <CropDetails></CropDetails>,
       },
       {
         path: "/myProfile",
