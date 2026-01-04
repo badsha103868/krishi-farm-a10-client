@@ -14,6 +14,7 @@ import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
 import PrivateRoute from "../Provider/PrivateRoute/PrivateRoute";
 import UpdateForm from "../Pages/Profile/UpdateForm";
+import DashboardLayout from "../Layout/DashboardLayout";
 
 const router = createBrowserRouter([
   {
@@ -60,32 +61,20 @@ const router = createBrowserRouter([
         path: "/updateForm",
         element: <UpdateForm></UpdateForm>,
       },
-      {
-        path: "/addCrops",
-        element: (
-          <PrivateRoute>
-            <AddCrop></AddCrop>
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/myPosts",
-        element: (
-          <PrivateRoute>
-            <MyPosts></MyPosts>
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/myInterests",
-        element: (
-          <PrivateRoute>
-            <MyInterests></MyInterests>
-          </PrivateRoute>
-        ),
-      },
+      
     ],
   },
+ {
+  path: "/dashboard",
+  element: <PrivateRoute><DashboardLayout /></PrivateRoute>,
+  children: [
+    { index: true, element: <DashboardOverview /> },
+    { path: "myProfile", element: <Profile /> },
+    { path: "myPosts", element: <MyPosts /> },
+    { path: "myInterests", element: <MyInterests /> },
+  ]
+}
+,
   {
     path: "/auth",
     Component: AuthLayout,
@@ -100,6 +89,9 @@ const router = createBrowserRouter([
       },
     ],
   },
+ 
+  
+  
 
   {
     path: "/*",
