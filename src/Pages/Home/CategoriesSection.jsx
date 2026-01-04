@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Loading from "../Loading/Loading";
+import { useNavigate } from "react-router";
 
 const DynamicCategoriesSection = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:3000/crops")
+    fetch("https://krishi-farm-a10-server.vercel.app/cropCategories")
       .then((res) => res.json())
       .then((data) => {
-        const uniqueCategories = [
-          ...new Set(data.map((crop) => crop.type)),
-        ];
-        setCategories(uniqueCategories);
+        setCategories(data);
         setLoading(false);
       })
       .catch((err) => {
@@ -21,22 +20,22 @@ const DynamicCategoriesSection = () => {
       });
   }, []);
 
-  if (loading) {
-   return <Loading></Loading>
-  }
+  if (loading) return <Loading />;
 
   return (
-    <section className="py-16 bg-base-100 dark:bg-gray-900 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 ">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-secondary dark:text-green-300 mb-12">
-         <span className="text-primary"> Browse by</span> Categories
+    <section className="py-16 bg-base-100">
+      <div className="max-w-7xl mx-auto px-4">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
+          <span className="text-primary">Browse by</span>{" "}
+          <span className="text-secondary">Categories</span>
         </h2>
 
         <div className="flex flex-wrap justify-center gap-4">
           {categories.map((category, index) => (
             <button
               key={index}
-              className="px-6 py-3 rounded-full bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 font-semibold hover:bg-green-200 dark:hover:bg-green-700 transition"
+              onClick={() => navigate(`/allCrops?type=${category}&page=1`)}
+              className="btn btn-outline btn-primary btn-sm"
             >
               {category}
             </button>

@@ -11,7 +11,9 @@ const MyInterests = () => {
   useEffect(() => {
     if (user?.email) {
       setLoading(true);
-      fetch(`http://localhost:3000/myInterests?email=${user.email}`)
+      fetch(
+        `https://krishi-farm-a10-server.vercel.app/myInterests?email=${user.email}`
+      )
         .then((res) => res.json())
         .then((data) => {
           setInterests(data);
@@ -40,7 +42,7 @@ const MyInterests = () => {
     return <Loading></Loading>;
   }
   return (
- <div className="mt-8 p-4 rounded-xl bg-base-200 shadow-sm my-5">
+    <div className="mt-8 p-4 rounded-xl bg-base-200 shadow-sm my-5">
       <h2 className="text-xl font-bold text-center mb-4 text-primary">
         My Interests
       </h2>

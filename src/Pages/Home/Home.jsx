@@ -11,20 +11,19 @@ import CategoriesSection from "./CategoriesSection";
 import StatsSection from "./StatsSection";
 import NewsletterSection from "./NewsletterSection";
 
-const latestCropsPromise = fetch("http://localhost:3000/latestCrops").then(
-  (res) => res.json()
-);
+const latestCropsPromise = fetch(
+  "https://krishi-farm-a10-server.vercel.app/latestCrops"
+).then((res) => res.json());
 
 const Home = () => {
   return (
     <div>
       <HeroSlider></HeroSlider>
 
-      <FeaturesSection></FeaturesSection>
-
       <LatestCrops latestCropsPromise={latestCropsPromise}></LatestCrops>
 
       <CategoriesSection></CategoriesSection>
+      <FeaturesSection></FeaturesSection>
 
       <WorkSection></WorkSection>
 

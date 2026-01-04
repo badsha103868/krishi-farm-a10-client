@@ -19,7 +19,9 @@ const MyPosts = () => {
   useEffect(() => {
     if (user?.email) {
       setLoading(true);
-      fetch(`http://localhost:3000/myCrops?email=${user.email}`)
+      fetch(
+        `https://krishi-farm-a10-server.vercel.app/myCrops?email=${user.email}`
+      )
         .then((res) => res.json())
         .then((data) => {
           setMyCrops(data);
@@ -40,11 +42,14 @@ const MyPosts = () => {
   // Handle update
   const handleUpdate = (e) => {
     e.preventDefault();
-    fetch(`http://localhost:3000/myCrops/${currentCrop._id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(currentCrop),
-    })
+    fetch(
+      `https://krishi-farm-a10-server.vercel.app/myCrops/${currentCrop._id}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(currentCrop),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
@@ -80,7 +85,7 @@ const MyPosts = () => {
       cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/myCrops/${_id}`, {
+        fetch(`https://krishi-farm-a10-server.vercel.app/myCrops/${_id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())
@@ -103,7 +108,7 @@ const MyPosts = () => {
     return <Loading></Loading>;
   }
   return (
-     <div className="mt-8 p-4 rounded-xl bg-base-200 shadow-sm my-5">
+    <div className="mt-8 p-4 rounded-xl bg-base-200 shadow-sm my-5">
       <h2 className="text-xl text-center font-bold mb-3 text-primary">
         My Crop Posts
       </h2>
@@ -219,7 +224,10 @@ const MyPosts = () => {
                 className="input w-full"
                 value={currentCrop.description}
                 onChange={(e) =>
-                  setCurrentCrop({ ...currentCrop, description: e.target.value })
+                  setCurrentCrop({
+                    ...currentCrop,
+                    description: e.target.value,
+                  })
                 }
               />
               <input

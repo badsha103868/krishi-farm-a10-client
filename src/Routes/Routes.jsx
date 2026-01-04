@@ -25,28 +25,27 @@ const router = createBrowserRouter([
         index: true,
         Component: Home,
       },
- {
-  path: "/allCrops",
-  loader: ({ request }) => {
-    const url = new URL(request.url);
+      {
+        path: "/allCrops",
+        loader: ({ request }) => {
+          const url = new URL(request.url);
 
-    const search = url.searchParams.get("search") || "";
-    const sort = url.searchParams.get("sort") || "";
-    const page = url.searchParams.get("page") || 1;
+          const search = url.searchParams.get("search") || "";
+          const type = url.searchParams.get("type") || "";
+          const sort = url.searchParams.get("sort") || "";
+          const page = url.searchParams.get("page") || 1;
 
-    return fetch(
-      `http://localhost:3000/crops?search=${search}&sort=${sort}&page=${page}&limit=8`
-    );
-  },
-  Component: AllCrops,
-},
-
-
+          return fetch(
+            `https://krishi-farm-a10-server.vercel.app/crops?search=${search}&type=${type}&sort=${sort}&page=${page}&limit=8`
+          );
+        },
+        Component: AllCrops,
+      },
 
       {
         path: "/cropDetails/:id",
         loader: ({ params }) =>
-          fetch(`http://localhost:3000/crops/${params.id}`),
+          fetch(`https://krishi-farm-a10-server.vercel.app/crops/${params.id}`),
         element: <CropDetails></CropDetails>,
       },
       {

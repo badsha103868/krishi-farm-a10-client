@@ -14,7 +14,6 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
   const interestModalRef = useRef(null);
   const authModalRef = useRef(null);
 
-
   const isOwner = user?.email === initialCrop?.owner?.ownerEmail;
 
   // auto price calculation
@@ -74,11 +73,14 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
       message,
     };
 
-    fetch(`http://localhost:3000/crops/${initialCrop._id}/interests`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(newInterest),
-    })
+    fetch(
+      `https://krishi-farm-a10-server.vercel.app/crops/${initialCrop._id}/interests`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(newInterest),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
@@ -119,7 +121,7 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
 
   // Accept / Reject function
   const handleStatusUpdate = (interestId, newStatus, quantityRequested) => {
-    fetch(`http://localhost:3000/interests/${interestId}`, {
+    fetch(`https://krishi-farm-a10-server.vercel.app/interests/${interestId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -291,7 +293,7 @@ const InterestSection = ({ crop: initialCrop, setCrop }) => {
         </form>
       )}
       {/* LOGIN / REGISTER MODAL */}
-     <dialog ref={authModalRef} className="modal">
+      <dialog ref={authModalRef} className="modal">
         <div className="modal-box bg-base-100 text-base-content text-center">
           <h3 className="font-bold text-xl mb-3">Login Required</h3>
           <p className="mb-6 text-base-content/80">

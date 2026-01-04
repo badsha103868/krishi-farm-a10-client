@@ -52,7 +52,7 @@ const AddCrop = () => {
       createdAt: new Date(),
     };
     setLoading(true);
-    fetch("http://localhost:3000/crops", {
+    fetch("https://krishi-farm-a10-server.vercel.app/crops", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newCrop),
@@ -166,11 +166,9 @@ const AddCrop = () => {
             />
 
             {/*Add  button */}
-           <button type="submit" className="btn btn-primary mt-4">
+            <button type="submit" className="btn btn-primary mt-4">
               Add Crop
             </button>
-
-        
           </fieldset>
         </form>
       </div>
