@@ -13,6 +13,8 @@ const MySwal = withReactContent(Swal);
 const Login = () => {
   // error state
   const [error, setError] = useState("");
+  const [demoEmail, setDemoEmail] = useState("");
+  const [demoPassword, setDemoPassword] = useState("");
 
   //  show password state
   const [showPassword, setShowPassword] = useState(false);
@@ -62,6 +64,11 @@ const Login = () => {
 
         form.reset();
       });
+  };
+  const handleDemoUser = () => {
+    setDemoEmail("badshagolder6@gmail.com");
+    setDemoPassword("Badsha1");
+    setError("");
   };
 
   //   google sign in
@@ -129,7 +136,11 @@ const Login = () => {
               name="email"
               placeholder="Email"
               required
-              onChange={() => setError("")}
+              value={demoEmail}
+              onChange={(e) => {
+                setDemoEmail(e.target.value);
+                setError("");
+              }}
             />
 
             {/* password */}
@@ -142,8 +153,19 @@ const Login = () => {
                 name="password"
                 placeholder="Password"
                 required
-                onChange={() => setError("")}
+                value={demoPassword}
+                onChange={(e) => {
+                  setDemoPassword(e.target.value);
+                  setError("");
+                }}
               />
+              <button
+                type="button"
+                onClick={handleDemoUser}
+                className="btn btn-outline btn-accent w-full mt-2"
+              >
+                Demo User Login
+              </button>
 
               <button
                 onClick={handleShowPassword}
